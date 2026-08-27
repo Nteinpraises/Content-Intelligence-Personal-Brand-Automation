@@ -1,0 +1,1633 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "5925d2dc-54e4-482d-9434-51492f2154fb",
+      "name": "Every Morning",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        400,
+        -336
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "brand_profiles",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "is_active",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "id": "21602b53-18d9-48c0-95ea-1ebbb804a959",
+      "name": "Get Brand Profile",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        224,
+        96
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "hasId",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f7a12630-1824-4001-9be3-ff97a9399a2c",
+      "name": "Has Brand Profile?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "content_calendar",
+        "limit": 10,
+        "orderBy": "date.desc",
+        "filterType": "none"
+      },
+      "id": "9ec1940d-10c9-4861-8191-fdde861def95",
+      "name": "Get Recent Calendar",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        672,
+        192
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "audiences",
+        "returnAll": true,
+        "filterType": "none"
+      },
+      "id": "c9d34e4e-6a36-47be-b40c-d7c60334a3e1",
+      "name": "Get Audiences",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        896,
+        192
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "content_pillars",
+        "returnAll": true,
+        "filterType": "none"
+      },
+      "id": "89659242-2c2c-4629-93b6-23d38dda0d06",
+      "name": "Get Pillars",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        192
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "research_items",
+        "limit": 500,
+        "filterType": "none"
+      },
+      "id": "2d310538-0b52-45bf-b5a2-d66f64aa067e",
+      "name": "Get Existing Research",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        192
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst today = $now.toFormat('yyyy-MM-dd');\nconst recent = $('Get Recent Calendar').all().map(i => i.json).filter(r => r && r.id);\nconst audiences = $('Get Audiences').all().map(a => a.json).filter(a => a && a.id);\nconst pillars = $('Get Pillars').all().map(p => p.json).filter(p => p && p.id);\n\nconst existing = recent.find(r => (r.date || '').slice(0,10) === today);\nif (existing) {\n  return [{ json: {\n    exists: true,\n    calendar_id: existing.id,\n    audience_id: existing.audience_id || null,\n    pillar_id: existing.pillar_id || null,\n    audience_name: existing.audience_name || null,\n    pillar_name: existing.pillar_name || null,\n    objective: existing.objective || 'Educate and build authority',\n    date: today,\n  }}];\n}\n\nconst lastAudience = recent.length ? recent[0].audience_name : null;\nconst lastPillar = recent.length ? recent[0].pillar_name : null;\n\nfunction pickLeastUsed(list, key, avoid) {\n  const counts = list.map(item => {\n    const name = item.name;\n    let idx = recent.findIndex(r => r[key] === name);\n    if (idx === -1) idx = 999;\n    return { item, staleness: idx, name };\n  });\n  const filtered = counts.filter(c => c.name !== avoid);\n  const pool = filtered.length ? filtered : counts;\n  pool.sort((a, b) => b.staleness - a.staleness);\n  return pool[0].item;\n}\n\nconst audience = pickLeastUsed(audiences, 'audience_name', lastAudience);\nconst pillar = pickLeastUsed(pillars, 'pillar_name', lastPillar);\n\nreturn [{ json: {\n  exists: false,\n  calendar_id: null,\n  audience_id: audience.id,\n  pillar_id: pillar.id,\n  audience_name: audience.name,\n  pillar_name: pillar.name,\n  objective: 'Educate and build authority',\n  date: today,\n}}];\n"
+      },
+      "id": "88f5aa05-81fd-4533-abba-fd2c2e9ff1f6",
+      "name": "Resolve Today Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "exists",
+              "leftValue": "={{ $json.exists }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7a343b24-62d6-4839-bfc0-c3588ad733be",
+      "name": "Calendar Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e1",
+              "name": "calendar_id",
+              "value": "={{ $json.calendar_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e2",
+              "name": "audience_id",
+              "value": "={{ $json.audience_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e3",
+              "name": "pillar_id",
+              "value": "={{ $json.pillar_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e4",
+              "name": "audience_name",
+              "value": "={{ $json.audience_name }}",
+              "type": "string"
+            },
+            {
+              "id": "e5",
+              "name": "pillar_name",
+              "value": "={{ $json.pillar_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "27048254-57b8-435d-87f7-6bfc50265c21",
+      "name": "Context (Existing)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2240,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_calendar",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").first().json.user_id }}"
+            },
+            {
+              "fieldId": "date",
+              "fieldValue": "={{ $json.date }}"
+            },
+            {
+              "fieldId": "scheduled_date",
+              "fieldValue": "={{ $json.date }}"
+            },
+            {
+              "fieldId": "audience_id",
+              "fieldValue": "={{ $json.audience_id }}"
+            },
+            {
+              "fieldId": "pillar_id",
+              "fieldValue": "={{ $json.pillar_id }}"
+            },
+            {
+              "fieldId": "audience_name",
+              "fieldValue": "={{ $json.audience_name }}"
+            },
+            {
+              "fieldId": "pillar_name",
+              "fieldValue": "={{ $json.pillar_name }}"
+            },
+            {
+              "fieldId": "objective",
+              "fieldValue": "={{ $json.objective }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "planned"
+            }
+          ]
+        }
+      },
+      "id": "4b4865e4-6f5a-4bb1-9331-e66528578384",
+      "name": "Create Calendar Plan",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        288
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "calendar_id",
+              "value": "={{ $(\"Create Calendar Plan\").item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "audience_id",
+              "value": "={{ $(\"Resolve Today Plan\").item.json.audience_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "pillar_id",
+              "value": "={{ $(\"Resolve Today Plan\").item.json.pillar_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c4",
+              "name": "audience_name",
+              "value": "={{ $(\"Resolve Today Plan\").item.json.audience_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5",
+              "name": "pillar_name",
+              "value": "={{ $(\"Resolve Today Plan\").item.json.pillar_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0111904-5a5f-46fc-95b2-36c7afc4f588",
+      "name": "Context (New)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2240,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "automation_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "WF1 - Intelligence & Research Engine"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "error"
+            },
+            {
+              "fieldId": "error",
+              "fieldValue": "No active brand profile found"
+            },
+            {
+              "fieldId": "execution_id",
+              "fieldValue": "={{ $execution.id }}"
+            },
+            {
+              "fieldId": "ran_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "3a8ec404-c087-4a18-89a4-fd97e7565a6d",
+      "name": "Log No Brand Profile",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "48118bdd-640c-492d-91ab-313ea7ff722f",
+      "name": "Calendar Context",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2464,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Generate research queries for today.\nAUDIENCE: {{ $json.audience_name }}\nPILLAR: {{ $json.pillar_name }}\nBRAND EXPERTISE: {{ JSON.stringify($(\"Get Brand Profile\").first().json) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Generate 5-10 specific, high-signal search queries for creating LinkedIn content for Ntein Praises (AI Automation Engineer). Base them on today's audience, today's content pillar, Ntein's expertise, AI automation, business automation, workflow automation, AI agents, software, current industry developments, business problems, and relevant trends. Queries must be specific and useful for content research. Return a queries array."
+        }
+      },
+      "id": "de62b5cd-d865-4e6a-beb3-2a70cb1cef0f",
+      "name": "AI - Generate Research Queries",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        768,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "efd497b1-4e42-4073-b42e-02b1ea5e4c04",
+      "name": "Queries Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        224
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"queries\":[\"query one\",\"query two\"]}"
+      },
+      "id": "47a7f3ea-ebcd-46a1-8dd8-1626dfe16724",
+      "name": "Queries Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.queries",
+        "options": {
+          "destinationFieldName": "query"
+        }
+      },
+      "id": "dfd151c1-d73e-45b1-a45f-f7e40bb8e7fa",
+      "name": "Split Queries",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpTemplatedCustomAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: $json.query, search_depth: \"advanced\", max_results: 5, include_answer: true, topic: \"general\" }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "14afcb71-e7df-4081-ba3b-b9097d3e4489",
+      "name": "Web Search (Tavily)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1344,
+        384
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpTemplatedCustomAuth": {
+          "id": "VAkLckegS00vV6nT",
+          "name": "Tavily API (npraises670)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst items = [];\nfor (const it of $input.all()) {\n  const resp = it.json || {};\n  const results = resp.results || [];\n  for (const r of results) {\n    if (!r.url && !r.title) continue;\n    const content = r.content || '';\n    items.push({ json: {\n      title: r.title || '',\n      url: r.url || '',\n      source: r.title || '',\n      published_date: r.published_date || null,\n      summary: content.slice(0, 800),\n      content: content,\n      category: '',\n    }});\n  }\n}\nreturn items;\n"
+      },
+      "id": "fed04b8e-d706-47f6-bc46-3fbc501e783b",
+      "name": "Extract Sources",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nfunction hashOf(str) {\n  let h = 0;\n  const s = String(str || '');\n  for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; }\n  return 'h' + (h >>> 0).toString(16);\n}\n\nconst existing = $('Get Existing Research').all()\n  .map(i => i.json && i.json.hash)\n  .filter(Boolean);\nconst existingSet = new Set(existing);\n\nconst seen = new Set();\nconst newItems = [];\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  if (!r.url && !r.title) continue;\n  const hash = hashOf((r.url || '') + '|' + (r.title || ''));\n  if (existingSet.has(hash) || seen.has(hash)) continue;\n  seen.add(hash);\n  newItems.push({\n    title: r.title || '',\n    url: r.url || '',\n    source: r.source || '',\n    published_date: r.published_date || null,\n    summary: r.summary || '',\n    content: r.content || '',\n    category: r.category || '',\n    hash,\n  });\n}\n\nconst capped = newItems.slice(0, 8);\nreturn [{ json: { count: capped.length, newItems: capped } }];\n"
+      },
+      "id": "67911107-5a58-46db-9943-48fb583f75c9",
+      "name": "Dedupe Research",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "count",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b8c5e27c-6850-4930-b33c-afc555a3da0b",
+      "name": "Has New Research?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1968,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "newItems",
+        "options": {}
+      },
+      "id": "a51d1829-1edb-473e-9615-b34c69cb73f6",
+      "name": "Split New Research",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "content_opportunities",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "calendar_id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Calendar Context\").first().json.calendar_id }}"
+            }
+          ]
+        }
+      },
+      "id": "b5c82b4e-bff1-43de-baac-86965ca7a97a",
+      "name": "Get Today Opportunities",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2688,
+        -256
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst rows = $input.all().map(i => i.json).filter(r => r && r.id);\n\nlet best = null;\nlet bestScore = -1;\nfor (const row of rows) {\n  const score = Number(row.overall_score ?? 0);\n  if (score > bestScore) {\n    bestScore = score;\n    best = row;\n  }\n}\n\nconst ctx = $('Calendar Context').first().json;\nreturn [{ json: {\n  opportunity_id: best ? best.id : null,\n  overall_score: bestScore,\n  calendar_id: ctx.calendar_id,\n  audience_id: ctx.audience_id,\n  pillar_id: ctx.pillar_id,\n}}];\n"
+      },
+      "id": "d6a38e53-91ba-4c70-93e5-f90886a25f8d",
+      "name": "Select Best Opportunity",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_calendar",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.calendar_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "opportunity_id",
+              "fieldValue": "={{ $json.opportunity_id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "opportunity_selected"
+            }
+          ]
+        }
+      },
+      "id": "885f4c88-c850-4fc9-bc5e-2a9e8d516b66",
+      "name": "Calendar Opportunity Selected",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2544,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ormN681TBCmAE0ex",
+          "cachedResultName": "WF2 - Content Production Engine"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "calendar_id": "={{ $(\"Select Best Opportunity\").item.json.calendar_id }}",
+            "opportunity_id": "={{ $(\"Select Best Opportunity\").item.json.opportunity_id }}",
+            "audience_id": "={{ $(\"Select Best Opportunity\").item.json.audience_id }}",
+            "pillar_id": "={{ $(\"Select Best Opportunity\").item.json.pillar_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calendar_id",
+              "displayName": "calendar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "opportunity_id",
+              "displayName": "opportunity_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "audience_id",
+              "displayName": "audience_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "pillar_id",
+              "displayName": "pillar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "id": "b780554a-6374-4ee7-bfd8-e99b992770f0",
+      "name": "Trigger WF2 - Content Production",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2768,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "automation_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").first().json.user_id }}"
+            },
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "WF1 - Intelligence & Research Engine"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"Select Best Opportunity\").item.json.calendar_id }}"
+            },
+            {
+              "fieldId": "opportunity_id",
+              "fieldValue": "={{ $(\"Select Best Opportunity\").item.json.opportunity_id }}"
+            },
+            {
+              "fieldId": "execution_id",
+              "fieldValue": "={{ $execution.id }}"
+            },
+            {
+              "fieldId": "ran_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "a0a4b6a0-95d7-4fb5-b545-ded6a8f7ecf9",
+      "name": "Log Run Success",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5104,
+        -304
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "id": "55483d93-7992-40d9-9bbe-38711d0e56a6",
+      "name": "Pace (Gemini free tier)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2688,
+        192
+      ],
+      "webhookId": "30c79b3a-d91d-4180-a95a-f9c3dc3541f8"
+    },
+    {
+      "parameters": {
+        "tableId": "research_items",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").first().json.user_id }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "url",
+              "fieldValue": "={{ $json.url }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ $json.source }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.published_date }}"
+            },
+            {
+              "fieldId": "summary",
+              "fieldValue": "={{ $json.summary }}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "category",
+              "fieldValue": "={{ $json.category }}"
+            },
+            {
+              "fieldId": "hash",
+              "fieldValue": "={{ $json.hash }}"
+            }
+          ]
+        }
+      },
+      "id": "ee489241-26e6-418c-b543-3017ef597151",
+      "name": "Save Research",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2416,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=RESEARCH ITEM: {{ JSON.stringify($(\"Analysis Loop\").item.json) }}\nAUDIENCE: {{ $(\"Calendar Context\").first().json.audience_name }}\nPILLAR: {{ $(\"Calendar Context\").first().json.pillar_name }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Analyze this research item for LinkedIn content. Determine main topic, important facts, useful statistics, business implications, emerging trend, potential discussion, relevance to Ntein's audience, relevance to the selected pillar, potential content angle, potential hook, and recommended format. NEVER invent facts or statistics — only use statistics that are supported by the provided source. Leave useful_statistics empty if none are supported."
+        }
+      },
+      "id": "5fa837f2-4c04-47d3-8789-a88e3ecbe7fa",
+      "name": "AI - Analyze Research",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1792,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "960d7804-880e-443e-9bef-f9b505d99590",
+      "name": "Analyze Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1808,
+        224
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"main_topic\":\"string\",\"important_facts\":\"string\",\"useful_statistics\":\"string\",\"business_implications\":\"string\",\"emerging_trend\":\"string\",\"potential_discussion\":\"string\",\"audience_relevance\":\"string\",\"pillar_relevance\":\"string\",\"content_angle\":\"string\",\"potential_hook\":\"string\",\"recommended_format\":\"text\"}"
+      },
+      "id": "6be8ba9d-5524-414c-a5c3-154a6ddc6e25",
+      "name": "Analyze Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1936,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=ANALYSIS: {{ JSON.stringify($(\"AI - Analyze Research\").item.json.output) }}\nRESEARCH ITEM: {{ JSON.stringify($(\"Analysis Loop\").item.json) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Score this content opportunity on relevance_score, timeliness_score, business_value_score, originality_score, and evidence_score (each 0-100), then compute overall_score (0-100) as a weighted blend. Reward strong, source-backed evidence and penalize weak or unsupported items."
+        }
+      },
+      "id": "7733b7f3-3a1c-45f4-8a5b-88898b8f539e",
+      "name": "AI - Score Opportunity",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2144,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "65a58177-49c0-4239-819f-37833b0ceef5",
+      "name": "Score Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2160,
+        224
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"relevance_score\":0,\"timeliness_score\":0,\"business_value_score\":0,\"originality_score\":0,\"evidence_score\":0,\"overall_score\":0}"
+      },
+      "id": "7dc8a5b1-beef-4e84-94e3-c6affb7c0b16",
+      "name": "Score Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2288,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_opportunities",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").first().json.user_id }}"
+            },
+            {
+              "fieldId": "research_item_id",
+              "fieldValue": "={{ $(\"Save Research\").item.json.id }}"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"Calendar Context\").first().json.calendar_id }}"
+            },
+            {
+              "fieldId": "audience_id",
+              "fieldValue": "={{ $(\"Calendar Context\").first().json.audience_id }}"
+            },
+            {
+              "fieldId": "pillar_id",
+              "fieldValue": "={{ $(\"Calendar Context\").first().json.pillar_id }}"
+            },
+            {
+              "fieldId": "main_topic",
+              "fieldValue": "={{ $(\"AI - Analyze Research\").item.json.output.main_topic }}"
+            },
+            {
+              "fieldId": "content_angle",
+              "fieldValue": "={{ $(\"AI - Analyze Research\").item.json.output.content_angle }}"
+            },
+            {
+              "fieldId": "potential_hook",
+              "fieldValue": "={{ $(\"AI - Analyze Research\").item.json.output.potential_hook }}"
+            },
+            {
+              "fieldId": "useful_statistics",
+              "fieldValue": "={{ $(\"AI - Analyze Research\").item.json.output.useful_statistics }}"
+            },
+            {
+              "fieldId": "recommended_format",
+              "fieldValue": "={{ $(\"AI - Analyze Research\").item.json.output.recommended_format }}"
+            },
+            {
+              "fieldId": "relevance_score",
+              "fieldValue": "={{ $(\"AI - Score Opportunity\").item.json.output.relevance_score }}"
+            },
+            {
+              "fieldId": "timeliness_score",
+              "fieldValue": "={{ $(\"AI - Score Opportunity\").item.json.output.timeliness_score }}"
+            },
+            {
+              "fieldId": "business_value_score",
+              "fieldValue": "={{ $(\"AI - Score Opportunity\").item.json.output.business_value_score }}"
+            },
+            {
+              "fieldId": "originality_score",
+              "fieldValue": "={{ $(\"AI - Score Opportunity\").item.json.output.originality_score }}"
+            },
+            {
+              "fieldId": "evidence_score",
+              "fieldValue": "={{ $(\"AI - Score Opportunity\").item.json.output.evidence_score }}"
+            },
+            {
+              "fieldId": "overall_score",
+              "fieldValue": "={{ $(\"AI - Score Opportunity\").item.json.output.overall_score }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "scored"
+            }
+          ]
+        }
+      },
+      "id": "62cb7954-f8e7-46bb-8295-f55239357061",
+      "name": "Save Opportunity",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "eb2c87d8-f1b4-401c-ad98-0a58a98dfd0d",
+      "name": "Analysis Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2464,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "automation_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").first().json.user_id }}"
+            },
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "WF1 - Intelligence & Research Engine"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "no_op"
+            },
+            {
+              "fieldId": "error",
+              "fieldValue": "No new research items after dedupe"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"Calendar Context\").first().json.calendar_id }}"
+            },
+            {
+              "fieldId": "execution_id",
+              "fieldValue": "={{ $execution.id }}"
+            },
+            {
+              "fieldId": "ran_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "1548e83e-2a2c-465e-b029-228b8ad94dba",
+      "name": "Log No New Research",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Morning": {
+      "main": [
+        [
+          {
+            "node": "Get Brand Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Brand Profile": {
+      "main": [
+        [
+          {
+            "node": "Has Brand Profile?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Brand Profile?": {
+      "main": [
+        [
+          {
+            "node": "Get Recent Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No Brand Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Recent Calendar": {
+      "main": [
+        [
+          {
+            "node": "Get Audiences",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Audiences": {
+      "main": [
+        [
+          {
+            "node": "Get Pillars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pillars": {
+      "main": [
+        [
+          {
+            "node": "Get Existing Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Research": {
+      "main": [
+        [
+          {
+            "node": "Resolve Today Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Today Plan": {
+      "main": [
+        [
+          {
+            "node": "Calendar Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Exists?": {
+      "main": [
+        [
+          {
+            "node": "Context (Existing)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Calendar Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context (Existing)": {
+      "main": [
+        [
+          {
+            "node": "Calendar Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Plan": {
+      "main": [
+        [
+          {
+            "node": "Context (New)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context (New)": {
+      "main": [
+        [
+          {
+            "node": "Calendar Context",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Calendar Context": {
+      "main": [
+        [
+          {
+            "node": "AI - Generate Research Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Generate Research Queries": {
+      "main": [
+        [
+          {
+            "node": "Split Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queries Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Generate Research Queries",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queries Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Generate Research Queries",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Queries": {
+      "main": [
+        [
+          {
+            "node": "Web Search (Tavily)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Search (Tavily)": {
+      "main": [
+        [
+          {
+            "node": "Extract Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Sources": {
+      "main": [
+        [
+          {
+            "node": "Dedupe Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe Research": {
+      "main": [
+        [
+          {
+            "node": "Has New Research?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has New Research?": {
+      "main": [
+        [
+          {
+            "node": "Split New Research",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No New Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split New Research": {
+      "main": [
+        [
+          {
+            "node": "Analysis Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Today Opportunities": {
+      "main": [
+        [
+          {
+            "node": "Select Best Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Best Opportunity": {
+      "main": [
+        [
+          {
+            "node": "Calendar Opportunity Selected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Opportunity Selected": {
+      "main": [
+        [
+          {
+            "node": "Trigger WF2 - Content Production",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger WF2 - Content Production": {
+      "main": [
+        [
+          {
+            "node": "Log Run Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace (Gemini free tier)": {
+      "main": [
+        [
+          {
+            "node": "Save Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Research": {
+      "main": [
+        [
+          {
+            "node": "AI - Analyze Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Analyze Research": {
+      "main": [
+        [
+          {
+            "node": "AI - Score Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Analyze Research",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Analyze Research",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Score Opportunity": {
+      "main": [
+        [
+          {
+            "node": "Save Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Score Opportunity",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Score Opportunity",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Opportunity": {
+      "main": [
+        [
+          {
+            "node": "Analysis Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analysis Loop": {
+      "main": [
+        [
+          {
+            "node": "Get Today Opportunities",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pace (Gemini free tier)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "nodeGroups": [
+    {
+      "id": "3efb719e-b1ff-4356-9bd7-47682ab5e263",
+      "name": "Load Strategy",
+      "nodeIds": [
+        "21602b53-18d9-48c0-95ea-1ebbb804a959",
+        "f7a12630-1824-4001-9be3-ff97a9399a2c",
+        "3a8ec404-c087-4a18-89a4-fd97e7565a6d",
+        "9ec1940d-10c9-4861-8191-fdde861def95",
+        "c9d34e4e-6a36-47be-b40c-d7c60334a3e1",
+        "89659242-2c2c-4629-93b6-23d38dda0d06",
+        "2d310538-0b52-45bf-b5a2-d66f64aa067e",
+        "88f5aa05-81fd-4533-abba-fd2c2e9ff1f6",
+        "7a343b24-62d6-4839-bfc0-c3588ad733be",
+        "4b4865e4-6f5a-4bb1-9331-e66528578384",
+        "a0111904-5a5f-46fc-95b2-36c7afc4f588",
+        "27048254-57b8-435d-87f7-6bfc50265c21",
+        "48118bdd-640c-492d-91ab-313ea7ff722f"
+      ],
+      "description": "Load brand profile, resolve or create today rotated calendar plan"
+    },
+    {
+      "id": "87e1bc45-3129-4609-a423-2be96b59dd2a",
+      "name": "Research Queries",
+      "nodeIds": [
+        "de62b5cd-d865-4e6a-beb3-2a70cb1cef0f",
+        "efd497b1-4e42-4073-b42e-02b1ea5e4c04",
+        "47a7f3ea-ebcd-46a1-8dd8-1626dfe16724",
+        "dfd151c1-d73e-45b1-a45f-f7e40bb8e7fa"
+      ],
+      "description": "Generate 5-10 focused research queries for today"
+    },
+    {
+      "id": "2caa1c86-0050-4b37-9cd5-45fa50b7aaa3",
+      "name": "Collect & Dedupe",
+      "nodeIds": [
+        "14afcb71-e7df-4081-ba3b-b9097d3e4489",
+        "fed04b8e-d706-47f6-bc46-3fbc501e783b",
+        "67911107-5a58-46db-9943-48fb583f75c9",
+        "b8c5e27c-6850-4930-b33c-afc555a3da0b",
+        "1548e83e-2a2c-465e-b029-228b8ad94dba",
+        "a51d1829-1edb-473e-9615-b34c69cb73f6"
+      ],
+      "description": "Search the web with Tavily, extract cited sources, dedupe by hash"
+    }
+  ],
+  "meta": {
+    "instanceId": "b9fb3cdf868e9dfec465e3c0424216039838facbcaef324bb65eb067f69e4271"
+  }
+}
