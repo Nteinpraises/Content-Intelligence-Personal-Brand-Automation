@@ -27,7 +27,7 @@ Output: a ready-to-review post draft + an image prompt in Supabase for the Lovab
 
 # WF3 — Content Management & Learning Engine
 
-The control surface between  Lovable frontend and the system. It receives POST requests with an action and routes to the matching handler:
+The control surface between the Lovable frontend and the system. It receives POST requests with an action and routes to the matching handler:
 
 approve_draft / reject_draft — update draft + calendar status
 regenerate_draft — re-trigger WF2 to remake content
