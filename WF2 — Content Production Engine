@@ -1,0 +1,1249 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "calendar_id"
+            },
+            {
+              "name": "opportunity_id"
+            },
+            {
+              "name": "audience_id"
+            },
+            {
+              "name": "pillar_id"
+            }
+          ]
+        }
+      },
+      "id": "bfbf38a1-20c0-4463-b0dc-39d192ca7a0f",
+      "name": "When Called by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -384,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "brand_profiles",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "is_active",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "id": "31ab3a46-8d9e-4707-87af-a5787f2223ed",
+      "name": "Get Brand Profile",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        32,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "content_opportunities",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"When Called by Another Workflow\").item.json.opportunity_id }}"
+            }
+          ]
+        }
+      },
+      "id": "aa4835e4-9558-4fa7-a3b2-c08594c5a401",
+      "name": "Get Opportunity",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "audiences",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"When Called by Another Workflow\").item.json.audience_id }}"
+            }
+          ]
+        }
+      },
+      "id": "80c41e44-8b6e-4f37-9646-4730a3d1e74d",
+      "name": "Get Audience",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        480,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "content_pillars",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"When Called by Another Workflow\").item.json.pillar_id }}"
+            }
+          ]
+        }
+      },
+      "id": "e065c3b7-4f35-4d5b-afaa-1ccab8d1664f",
+      "name": "Get Content Pillar",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        704,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "research_items",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Get Opportunity\").item.json.research_item_id }}"
+            }
+          ]
+        }
+      },
+      "id": "a36298e0-12fe-4068-b9b4-eb8822e22179",
+      "name": "Get Research Source",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        928,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=BRAND PROFILE: {{ JSON.stringify($(\"Get Brand Profile\").item.json) }}\nTARGET AUDIENCE: {{ JSON.stringify($(\"Get Audience\").item.json) }}\nCONTENT PILLAR: {{ JSON.stringify($(\"Get Content Pillar\").item.json) }}\nSELECTED OPPORTUNITY: {{ JSON.stringify($(\"Get Opportunity\").item.json) }}\nRESEARCH SOURCE (only source of facts/stats): {{ JSON.stringify($(\"Get Research Source\").item.json) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are the LinkedIn ghostwriter for Ntein Praises, an AI Automation Engineer.\nWrite ONE high-quality LinkedIn post that:\n- starts with a strong hook\n- identifies a real problem or observation\n- explains the idea clearly and provides useful insight\n- uses supporting evidence ONLY when it is backed by the provided research source\n- connects naturally to Ntein's AI automation expertise\n- is understandable to non-technical business owners; avoid jargon and generic AI language\n- NEVER fabricates personal experiences, client results, statistics, or unsupported claims\n- ends with a natural CTA\nReturn every requested field. full_post must combine hook, body, cta and closing into the final post text."
+        }
+      },
+      "id": "06b7fc96-e323-47ee-b30a-f15e851f69f0",
+      "name": "AI - LinkedIn Content Generator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        784,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "00c12bb3-a1be-427a-a569-1137f4934182",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        544
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}"
+      },
+      "id": "3457af5c-8cc1-4e8e-ada4-614204ffcecc",
+      "name": "Content Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        928,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_drafts",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").item.json.user_id }}"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"When Called by Another Workflow\").item.json.calendar_id }}"
+            },
+            {
+              "fieldId": "opportunity_id",
+              "fieldValue": "={{ $(\"When Called by Another Workflow\").item.json.opportunity_id }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.title }}"
+            },
+            {
+              "fieldId": "hook",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.hook }}"
+            },
+            {
+              "fieldId": "body",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.body }}"
+            },
+            {
+              "fieldId": "cta",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.cta }}"
+            },
+            {
+              "fieldId": "closing",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.closing }}"
+            },
+            {
+              "fieldId": "hashtags",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.hashtags }}"
+            },
+            {
+              "fieldId": "full_post",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.full_post }}"
+            },
+            {
+              "fieldId": "recommended_format",
+              "fieldValue": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.recommended_format }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "generated"
+            }
+          ]
+        }
+      },
+      "id": "b0a95641-cad0-46aa-be23-a409abe6ad3f",
+      "name": "Create Draft",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        336
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Review this LinkedIn post: {{ JSON.stringify($(\"AI - LinkedIn Content Generator\").item.json.output) }}\nBrand positioning: {{ JSON.stringify($(\"Get Brand Profile\").item.json) }}\nResearch source (allowed facts): {{ JSON.stringify($(\"Get Research Source\").item.json) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a strict content editor. Score the post on clarity, usefulness, originality, audience relevance, factual accuracy, positioning consistency, AI-sounding language (lower is better), unsupported claims (count), and jargon. Set passed=false when the post is weak, generic, jargon-heavy, or contains any unsupported claim or fabricated fact/result; otherwise passed=true."
+        }
+      },
+      "id": "c774c8dc-bd7a-4af7-9ed6-b7f6de393d18",
+      "name": "AI - Content Quality Check",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1360,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "037aa223-45a4-4b42-887a-b8534724d1cf",
+      "name": "Google Gemini Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1216,
+        544
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"passed\":true,\"overall_quality\":85,\"clarity\":9,\"usefulness\":9,\"originality\":8,\"audience_relevance\":9,\"factual_accuracy\":9,\"positioning_consistency\":9,\"ai_sounding_language\":2,\"unsupported_claims\":0,\"jargon\":1,\"feedback\":\"string\"}"
+      },
+      "id": "b0d64ab9-a03c-49cb-aaad-fda20699e11d",
+      "name": "Quality Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1504,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "passed",
+              "leftValue": "={{ $(\"AI - Content Quality Check\").item.json.output.passed }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e4cf7b9d-926b-4f9d-91fc-274a7345f712",
+      "name": "Quality Insufficient?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1712,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Rewrite and improve this LinkedIn post based on the editor feedback. This is the FINAL attempt.\nEDITOR FEEDBACK: {{ JSON.stringify($(\"AI - Content Quality Check\").item.json.output) }}\nPREVIOUS POST: {{ JSON.stringify($(\"AI - LinkedIn Content Generator\").item.json.output) }}\nBRAND PROFILE: {{ JSON.stringify($(\"Get Brand Profile\").item.json) }}\nAUDIENCE: {{ JSON.stringify($(\"Get Audience\").item.json) }}\nPILLAR: {{ JSON.stringify($(\"Get Content Pillar\").item.json) }}\nRESEARCH SOURCE (only source of facts): {{ JSON.stringify($(\"Get Research Source\").item.json) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are the LinkedIn ghostwriter for Ntein Praises, an AI Automation Engineer.\nWrite ONE high-quality LinkedIn post that:\n- starts with a strong hook\n- identifies a real problem or observation\n- explains the idea clearly and provides useful insight\n- uses supporting evidence ONLY when it is backed by the provided research source\n- connects naturally to Ntein's AI automation expertise\n- is understandable to non-technical business owners; avoid jargon and generic AI language\n- NEVER fabricates personal experiences, client results, statistics, or unsupported claims\n- ends with a natural CTA\nReturn every requested field. full_post must combine hook, body, cta and closing into the final post text."
+        }
+      },
+      "id": "cd0c5ffc-9a01-495b-8c17-426d4d5fe119",
+      "name": "AI - Regenerate Content",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1936,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "333ec51b-2f62-4788-b1db-497920053851",
+      "name": "Google Gemini Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1952,
+        432
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}"
+      },
+      "id": "88418d02-2307-4e47-b92d-359461c0359f",
+      "name": "Regenerate Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2080,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_drafts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Create Draft\").item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.title }}"
+            },
+            {
+              "fieldId": "hook",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.hook }}"
+            },
+            {
+              "fieldId": "body",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.body }}"
+            },
+            {
+              "fieldId": "cta",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.cta }}"
+            },
+            {
+              "fieldId": "closing",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.closing }}"
+            },
+            {
+              "fieldId": "hashtags",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.hashtags }}"
+            },
+            {
+              "fieldId": "full_post",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.full_post }}"
+            },
+            {
+              "fieldId": "recommended_format",
+              "fieldValue": "={{ $(\"AI - Regenerate Content\").item.json.output.recommended_format }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "generated"
+            }
+          ]
+        }
+      },
+      "id": "f28357d3-b29f-497a-b4a5-d3b877b3c61a",
+      "name": "Update Draft (Regenerated)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "full_post",
+              "value": "={{ $(\"AI - Regenerate Content\").item.json.output.full_post }}",
+              "type": "string"
+            },
+            {
+              "id": "b2",
+              "name": "recommended_format",
+              "value": "={{ $(\"AI - Regenerate Content\").item.json.output.recommended_format }}",
+              "type": "string"
+            },
+            {
+              "id": "b3",
+              "name": "draft_id",
+              "value": "={{ $(\"Create Draft\").item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f4951483-3257-45a2-8109-d5c527188a79",
+      "name": "Use Regenerated Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2512,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "full_post",
+              "value": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.full_post }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "recommended_format",
+              "value": "={{ $(\"AI - LinkedIn Content Generator\").item.json.output.recommended_format }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "draft_id",
+              "value": "={{ $(\"Create Draft\").item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "87c3a25a-16a6-4cca-94a8-32fb6888b7b7",
+      "name": "Use Original Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2512,
+        464
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2f82eb54-07f3-4b36-864c-7affe280e2d7",
+      "name": "Content Ready",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2736,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=POST: {{ $json.full_post }}\nPILLAR: {{ JSON.stringify($(\"Get Content Pillar\").item.json) }}\nOPPORTUNITY: {{ JSON.stringify($(\"Get Opportunity\").item.json) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Decide whether this LinkedIn post should have a visual and pick ONE visual_format from: workflow diagram, process map, architecture diagram, infographic, carousel, before/after diagram, conceptual illustration, personal image, screenshot, no visual. Rules: AI automation posts -> workflow diagram or architecture diagram; business problem posts -> before/after process diagram; educational posts -> simple explanatory diagram; personal/build-in-public posts -> personal image or simple technical visual. Set needs_visual=false and visual_format=\"no visual\" when a visual adds no value."
+        }
+      },
+      "id": "6b574c49-a795-428b-8bf7-b512374f634c",
+      "name": "AI - Visual Strategy",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3984,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "6bce8ee1-d324-4b89-854e-5bfa3f5624a6",
+      "name": "Google Gemini Chat Model3",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        3936,
+        528
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"needs_visual\":true,\"visual_format\":\"workflow diagram\",\"reason\":\"string\"}"
+      },
+      "id": "fd70885e-e00a-495b-8a62-b295b5c2c802",
+      "name": "Visual Strategy Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4128,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=VISUAL STRATEGY: {{ JSON.stringify($(\"AI - Visual Strategy\").item.json.output) }}\nPOST: {{ $(\"Content Ready\").item.json.full_post }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Produce a detailed visual specification and an image generation prompt. The gamma_prompt field must clearly and vividly describe the image to generate. Keep visuals professional, minimal and readable. Do not overload diagrams with text."
+        }
+      },
+      "id": "5cf23a59-2ba0-43e2-9143-0717e97815ba",
+      "name": "AI - Generate Visual Prompt",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4336,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "2adeb54d-7164-4fc2-a922-5d2c04975bc7",
+      "name": "Google Gemini Chat Model4",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        4240,
+        480
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"visual_type\":\"workflow diagram\",\"concept\":\"string\",\"layout\":\"string\",\"required_elements\":\"string\",\"visual_text\":\"string\",\"style\":\"string\",\"aspect_ratio\":\"1:1\",\"gamma_prompt\":\"string\"}"
+      },
+      "id": "ba02a545-9a89-4eb1-8fad-b5020857f30b",
+      "name": "Visual Prompt Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4480,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "visual_prompts",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").item.json.user_id }}"
+            },
+            {
+              "fieldId": "draft_id",
+              "fieldValue": "={{ $(\"Content Ready\").item.json.draft_id }}"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"When Called by Another Workflow\").item.json.calendar_id }}"
+            },
+            {
+              "fieldId": "visual_type",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.visual_type }}"
+            },
+            {
+              "fieldId": "concept",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.concept }}"
+            },
+            {
+              "fieldId": "layout",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.layout }}"
+            },
+            {
+              "fieldId": "required_elements",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.required_elements }}"
+            },
+            {
+              "fieldId": "visual_text",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.visual_text }}"
+            },
+            {
+              "fieldId": "style",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.style }}"
+            },
+            {
+              "fieldId": "aspect_ratio",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.aspect_ratio }}"
+            },
+            {
+              "fieldId": "image_prompt",
+              "fieldValue": "={{ $(\"AI - Generate Visual Prompt\").item.json.output.gamma_prompt }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "prompt_ready"
+            }
+          ]
+        }
+      },
+      "id": "cf8d79d8-98a0-4c9d-bd43-7442ed47b657",
+      "name": "Save Visual Prompt",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4688,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_calendar",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"When Called by Another Workflow\").item.json.calendar_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "ready_for_review"
+            }
+          ]
+        }
+      },
+      "id": "34828fe0-f5a4-40e6-9295-d6e29ffb3b41",
+      "name": "Calendar Ready for Review",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5216,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "automation_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").item.json.user_id }}"
+            },
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "WF2 - Content Production Engine"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"When Called by Another Workflow\").item.json.calendar_id }}"
+            },
+            {
+              "fieldId": "opportunity_id",
+              "fieldValue": "={{ $(\"When Called by Another Workflow\").item.json.opportunity_id }}"
+            },
+            {
+              "fieldId": "execution_id",
+              "fieldValue": "={{ $execution.id }}"
+            },
+            {
+              "fieldId": "ran_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "dd614621-7b73-4ab9-a351-a94549fe1dbe",
+      "name": "Log Automation Run",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5440,
+        224
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When Called by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Brand Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Brand Profile": {
+      "main": [
+        [
+          {
+            "node": "Get Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Opportunity": {
+      "main": [
+        [
+          {
+            "node": "Get Audience",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Audience": {
+      "main": [
+        [
+          {
+            "node": "Get Content Pillar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Content Pillar": {
+      "main": [
+        [
+          {
+            "node": "Get Research Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Research Source": {
+      "main": [
+        [
+          {
+            "node": "AI - LinkedIn Content Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - LinkedIn Content Generator": {
+      "main": [
+        [
+          {
+            "node": "Create Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - LinkedIn Content Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - LinkedIn Content Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Draft": {
+      "main": [
+        [
+          {
+            "node": "AI - Content Quality Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Content Quality Check": {
+      "main": [
+        [
+          {
+            "node": "Quality Insufficient?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Content Quality Check",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Content Quality Check",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Insufficient?": {
+      "main": [
+        [
+          {
+            "node": "AI - Regenerate Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Use Original Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Regenerate Content": {
+      "main": [
+        [
+          {
+            "node": "Update Draft (Regenerated)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Regenerate Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regenerate Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Regenerate Content",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Draft (Regenerated)": {
+      "main": [
+        [
+          {
+            "node": "Use Regenerated Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Regenerated Content": {
+      "main": [
+        [
+          {
+            "node": "Content Ready",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Use Original Content": {
+      "main": [
+        [
+          {
+            "node": "Content Ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Ready": {
+      "main": [
+        [
+          {
+            "node": "AI - Visual Strategy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Visual Strategy": {
+      "main": [
+        [
+          {
+            "node": "AI - Generate Visual Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Visual Strategy",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visual Strategy Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Visual Strategy",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Generate Visual Prompt": {
+      "main": [
+        [
+          {
+            "node": "Save Visual Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Generate Visual Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visual Prompt Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Generate Visual Prompt",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Visual Prompt": {
+      "main": [
+        [
+          {
+            "node": "Calendar Ready for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Ready for Review": {
+      "main": [
+        [
+          {
+            "node": "Log Automation Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "nodeGroups": [
+    {
+      "id": "704beb3d-c55b-4d73-b4b6-0ed0f3fbbc45",
+      "name": "Context",
+      "nodeIds": [
+        "31ab3a46-8d9e-4707-87af-a5787f2223ed",
+        "aa4835e4-9558-4fa7-a3b2-c08594c5a401",
+        "80c41e44-8b6e-4f37-9646-4730a3d1e74d",
+        "e065c3b7-4f35-4d5b-afaa-1ccab8d1664f",
+        "a36298e0-12fe-4068-b9b4-eb8822e22179"
+      ],
+      "description": "Retrieve brand profile, opportunity, audience, pillar and research source from Supabase"
+    },
+    {
+      "id": "65da9e64-fec0-4931-b23a-339d72d4fd9c",
+      "name": "Generate & Quality",
+      "nodeIds": [
+        "06b7fc96-e323-47ee-b30a-f15e851f69f0",
+        "3457af5c-8cc1-4e8e-ada4-614204ffcecc",
+        "b0a95641-cad0-46aa-be23-a409abe6ad3f",
+        "c774c8dc-bd7a-4af7-9ed6-b7f6de393d18",
+        "b0d64ab9-a03c-49cb-aaad-fda20699e11d",
+        "e4cf7b9d-926b-4f9d-91fc-274a7345f712",
+        "cd0c5ffc-9a01-495b-8c17-426d4d5fe119",
+        "88418d02-2307-4e47-b92d-359461c0359f",
+        "f28357d3-b29f-497a-b4a5-d3b877b3c61a",
+        "87c3a25a-16a6-4cca-94a8-32fb6888b7b7",
+        "f4951483-3257-45a2-8109-d5c527188a79",
+        "2f82eb54-07f3-4b36-864c-7affe280e2d7",
+        "00c12bb3-a1be-427a-a569-1137f4934182",
+        "037aa223-45a4-4b42-887a-b8534724d1cf",
+        "333ec51b-2f62-4788-b1db-497920053851"
+      ],
+      "description": "Generate the LinkedIn post, save the draft, quality check and regenerate once if needed"
+    },
+    {
+      "id": "8a491f3a-a41e-4048-b6b7-4524fe2dccd7",
+      "name": "Visual",
+      "nodeIds": [
+        "6b574c49-a795-428b-8bf7-b512374f634c",
+        "fd70885e-e00a-495b-8a62-b295b5c2c802",
+        "5cf23a59-2ba0-43e2-9143-0717e97815ba",
+        "ba02a545-9a89-4eb1-8fad-b5020857f30b",
+        "cf8d79d8-98a0-4c9d-bd43-7442ed47b657",
+        "6bce8ee1-d324-4b89-854e-5bfa3f5624a6",
+        "2adeb54d-7164-4fc2-a922-5d2c04975bc7"
+      ],
+      "description": "Decide visual strategy and save a detailed image prompt (status prompt_ready) for manual image creation"
+    },
+    {
+      "id": "b5d17673-e9a9-4fcd-a11e-69b89ba5a654",
+      "name": "Persist & Log",
+      "nodeIds": [
+        "34828fe0-f5a4-40e6-9295-d6e29ffb3b41",
+        "dd614621-7b73-4ab9-a351-a94549fe1dbe"
+      ],
+      "description": "Mark calendar ready for review and log the run to automation_runs"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b9fb3cdf868e9dfec465e3c0424216039838facbcaef324bb65eb067f69e4271"
+  }
+}
