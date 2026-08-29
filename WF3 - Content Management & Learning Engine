@@ -1,0 +1,1854 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "content-management",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "ab348b57-ac0f-44e5-8112-b81cd2a5670c",
+      "name": "Content Management Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        832
+      ],
+      "webhookId": "ab84ceb8-b393-466f-966d-346dbc671426"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r0",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "approve_draft",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "approve_draft"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "reject_draft",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reject_draft"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "regenerate_draft",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "regenerate_draft"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r3",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "reschedule_content",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reschedule_content"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r4",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "mark_as_published",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mark_as_published"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r5",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "request_visual",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "request_visual"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r6",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "retry_visual",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry_visual"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r7",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "save_feedback",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "save_feedback"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "invalid"
+        }
+      },
+      "id": "56bd063b-847c-4668-88d6-38ea03ba71b4",
+      "name": "Route Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_drafts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "approved"
+            }
+          ]
+        }
+      },
+      "id": "87304897-8e45-4636-93e5-ee6aea70a979",
+      "name": "Approve - Update Draft",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_calendar",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "approved"
+            }
+          ]
+        }
+      },
+      "id": "03042a4c-8298-4c7d-a721-70d63fc1d853",
+      "name": "Approve - Update Calendar",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "approve_draft",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Draft approved",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3bf4ee78-f67a-4bd2-9913-dae1d1b5f76a",
+      "name": "Approve Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3f942ed8-50f4-4f8d-941b-71f4f0e6f081",
+      "name": "Converge Result",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "automation_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "WF3 - Content Management & Learning Engine"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "={{ $json.action }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.message }}"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $json.calendar_id }}"
+            },
+            {
+              "fieldId": "draft_id",
+              "fieldValue": "={{ $json.draft_id }}"
+            },
+            {
+              "fieldId": "execution_id",
+              "fieldValue": "={{ $execution.id }}"
+            },
+            {
+              "fieldId": "ran_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "93bdf0ff-ec91-4d47-84fe-6b2980135269",
+      "name": "Log Automation Run",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2368,
+        736
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ action: $json.action, status: $json.status, message: $json.message, draft_id: $json.draft_id, calendar_id: $json.calendar_id }) }}",
+        "options": {
+          "responseCode": "={{ $json.http_status }}"
+        }
+      },
+      "id": "78e73ee0-2cac-4538-a5c5-c9ebd061e7d0",
+      "name": "Respond to Frontend",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2368,
+        928
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_drafts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "rejected"
+            },
+            {
+              "fieldId": "rejection_reason",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.rejection_reason }}"
+            }
+          ]
+        }
+      },
+      "id": "8055d1b6-4b0c-425a-b9cb-36891fd74c1c",
+      "name": "Reject - Update Draft",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_calendar",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "rejected"
+            }
+          ]
+        }
+      },
+      "id": "b41b3998-7ae9-49db-853e-a5be8f33d4ab",
+      "name": "Reject - Update Calendar",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "reject_draft",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Draft rejected",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "87a171ea-a3ec-4339-9ba0-dda196b6ad92",
+      "name": "Reject Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ormN681TBCmAE0ex",
+          "cachedResultName": "WF2 - Content Production Engine"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "calendar_id": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+            "opportunity_id": "={{ $(\"Content Management Webhook\").item.json.body.opportunity_id }}",
+            "audience_id": "={{ $(\"Content Management Webhook\").item.json.body.audience_id }}",
+            "pillar_id": "={{ $(\"Content Management Webhook\").item.json.body.pillar_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calendar_id",
+              "displayName": "calendar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "opportunity_id",
+              "displayName": "opportunity_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "audience_id",
+              "displayName": "audience_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "pillar_id",
+              "displayName": "pillar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "id": "58071d0f-676d-4c62-9419-0857bfe7db51",
+      "name": "Regenerate - Trigger WF2",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1696,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "regenerate_draft",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Draft regeneration triggered",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fcb97a7d-ec5b-497d-8d73-1db0e706960f",
+      "name": "Regenerate Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_calendar",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "scheduled_date",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.new_date }}"
+            }
+          ]
+        }
+      },
+      "id": "1d81d0f1-cb6f-4762-a59c-970dd076e42d",
+      "name": "Reschedule - Update Calendar",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        576
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "reschedule_content",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Content rescheduled",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cefaa529-6ffe-4e85-bd8f-fb14b4b3d701",
+      "name": "Reschedule Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "visual_prompts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "draft_id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "pending_generation"
+            }
+          ]
+        }
+      },
+      "id": "2cf5835a-f3ab-4f76-8c9b-1a1c26e565f3",
+      "name": "Request Visual - Update",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        1072
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "request_visual",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Visual queued for generation",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0f306ef-d3cd-4d3a-810e-525810194892",
+      "name": "Request Visual Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        1072
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "visual_prompts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "draft_id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "pending_generation"
+            }
+          ]
+        }
+      },
+      "id": "b05dbc05-060c-4d42-b114-547a0e11d815",
+      "name": "Retry Visual - Update",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        1264
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "retry_visual",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Visual generation retried",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fced6595-67e3-42f9-bc03-f573298107a4",
+      "name": "Retry Visual Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        1264
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_drafts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "feedback",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.feedback }}"
+            }
+          ]
+        }
+      },
+      "id": "c6d8f399-6e06-4683-9f4a-910143c6f9b0",
+      "name": "Save Feedback",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        1456
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "save_feedback",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Feedback saved",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "551eefec-b0d0-4f87-94af-06ee688e6025",
+      "name": "Feedback Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        1456
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.action }}",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Unknown or unsupported action",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 400,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b5649bb0-8f20-4e1e-a5a9-4a0487039969",
+      "name": "Invalid Action Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1920,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_calendar",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "published"
+            }
+          ]
+        }
+      },
+      "id": "02522294-5911-4846-a185-2c0430af2272",
+      "name": "Publish - Update Calendar",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1184,
+        960
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "content_drafts",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "published"
+            },
+            {
+              "fieldId": "published_at",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.published_at || $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "0ca4dab8-1b3e-4293-9067-48e5879ad653",
+      "name": "Publish - Update Draft",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        960
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "content_analytics",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "draft_id",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}"
+            },
+            {
+              "fieldId": "impressions",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.impressions }}"
+            },
+            {
+              "fieldId": "reactions",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.reactions }}"
+            },
+            {
+              "fieldId": "comments",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.comments }}"
+            },
+            {
+              "fieldId": "reposts",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.reposts }}"
+            },
+            {
+              "fieldId": "saves",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.saves }}"
+            },
+            {
+              "fieldId": "profile_visits",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.profile_visits }}"
+            },
+            {
+              "fieldId": "followers_gained",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.followers_gained }}"
+            },
+            {
+              "fieldId": "leads",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.leads }}"
+            },
+            {
+              "fieldId": "meetings_booked",
+              "fieldValue": "={{ $(\"Content Management Webhook\").item.json.body.metrics.meetings_booked }}"
+            }
+          ]
+        }
+      },
+      "id": "14f847b4-04a3-4923-bcb9-5b241c713555",
+      "name": "Save Analytics",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        960
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "content_analytics",
+        "limit": 100,
+        "orderBy": "created_at.desc",
+        "filterType": "none"
+      },
+      "id": "1c44122f-3383-4216-a653-8180bc5f0eb9",
+      "name": "Get Analytics History",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        960
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=ANALYTICS HISTORY: {{ JSON.stringify($(\"Get Analytics History\").all().map(i => i.json)) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Analyze historical LinkedIn content performance. Identify topics, audiences, content pillars, hooks, and formats that performed well; recurring themes; and weak content patterns. Base findings only on the provided analytics data. Return concise, actionable insights that future research and content generation can use."
+        }
+      },
+      "id": "a82d1eea-abfc-477a-b0e1-289bb5b76c8a",
+      "name": "AI - Performance Analysis",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2080,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "id": "bd19960a-6cb4-4522-ace0-d7138f614a35",
+      "name": "Performance Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2096,
+        1184
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QNmeIvFjzPFEgrfE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"top_topics\":\"string\",\"top_audiences\":\"string\",\"top_pillars\":\"string\",\"top_hooks\":\"string\",\"top_formats\":\"string\",\"recurring_themes\":\"string\",\"weak_patterns\":\"string\",\"summary\":\"string\"}"
+      },
+      "id": "efd3852c-2e1c-4921-92e7-5f7bf5c5cc41",
+      "name": "Performance Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2224,
+        1184
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_insights",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "top_topics",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.top_topics }}"
+            },
+            {
+              "fieldId": "top_audiences",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.top_audiences }}"
+            },
+            {
+              "fieldId": "top_pillars",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.top_pillars }}"
+            },
+            {
+              "fieldId": "top_hooks",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.top_hooks }}"
+            },
+            {
+              "fieldId": "top_formats",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.top_formats }}"
+            },
+            {
+              "fieldId": "recurring_themes",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.recurring_themes }}"
+            },
+            {
+              "fieldId": "weak_patterns",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.weak_patterns }}"
+            },
+            {
+              "fieldId": "summary",
+              "fieldValue": "={{ $(\"AI - Performance Analysis\").item.json.output.summary }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "e4050ef1-ad9a-4c80-806a-5839fc531b43",
+      "name": "Save Insights",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2432,
+        960
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a",
+              "name": "action",
+              "value": "mark_as_published",
+              "type": "string"
+            },
+            {
+              "id": "s",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "m",
+              "name": "message",
+              "value": "Content published, analytics + insights saved",
+              "type": "string"
+            },
+            {
+              "id": "h",
+              "name": "http_status",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "d",
+              "name": "draft_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.draft_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c",
+              "name": "calendar_id",
+              "value": "={{ $(\"Content Management Webhook\").item.json.body.calendar_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1b7466fe-b05c-4303-9ce5-50d2e1f8e07b",
+      "name": "Publish Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2656,
+        960
+      ]
+    }
+  ],
+  "connections": {
+    "Content Management Webhook": {
+      "main": [
+        [
+          {
+            "node": "Route Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Action": {
+      "main": [
+        [
+          {
+            "node": "Approve - Update Draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reject - Update Draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Regenerate - Trigger WF2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reschedule - Update Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Publish - Update Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Request Visual - Update",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retry Visual - Update",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Feedback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Action Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve - Update Draft": {
+      "main": [
+        [
+          {
+            "node": "Approve - Update Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve - Update Calendar": {
+      "main": [
+        [
+          {
+            "node": "Approve Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converge Result": {
+      "main": [
+        [
+          {
+            "node": "Log Automation Run",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reject - Update Draft": {
+      "main": [
+        [
+          {
+            "node": "Reject - Update Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reject - Update Calendar": {
+      "main": [
+        [
+          {
+            "node": "Reject Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reject Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regenerate - Trigger WF2": {
+      "main": [
+        [
+          {
+            "node": "Regenerate Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regenerate Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reschedule - Update Calendar": {
+      "main": [
+        [
+          {
+            "node": "Reschedule Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reschedule Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Visual - Update": {
+      "main": [
+        [
+          {
+            "node": "Request Visual Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Visual Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry Visual - Update": {
+      "main": [
+        [
+          {
+            "node": "Retry Visual Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry Visual Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Feedback": {
+      "main": [
+        [
+          {
+            "node": "Feedback Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feedback Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invalid Action Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish - Update Calendar": {
+      "main": [
+        [
+          {
+            "node": "Publish - Update Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish - Update Draft": {
+      "main": [
+        [
+          {
+            "node": "Save Analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Analytics": {
+      "main": [
+        [
+          {
+            "node": "Get Analytics History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Analytics History": {
+      "main": [
+        [
+          {
+            "node": "AI - Performance Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Performance Analysis": {
+      "main": [
+        [
+          {
+            "node": "Save Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Performance Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Performance Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Performance Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Performance Analysis",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Insights": {
+      "main": [
+        [
+          {
+            "node": "Publish Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish Result": {
+      "main": [
+        [
+          {
+            "node": "Converge Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "nodeGroups": [
+    {
+      "id": "d6c95a1b-1b70-44f2-a29c-4b1bfce896c6",
+      "name": "Publish / Analytics / Learning",
+      "nodeIds": [
+        "02522294-5911-4846-a185-2c0430af2272",
+        "0ca4dab8-1b3e-4293-9067-48e5879ad653",
+        "14f847b4-04a3-4923-bcb9-5b241c713555",
+        "1c44122f-3383-4216-a653-8180bc5f0eb9",
+        "a82d1eea-abfc-477a-b0e1-289bb5b76c8a",
+        "bd19960a-6cb4-4522-ace0-d7138f614a35",
+        "efd3852c-2e1c-4921-92e7-5f7bf5c5cc41",
+        "e4050ef1-ad9a-4c80-806a-5839fc531b43",
+        "1b7466fe-b05c-4303-9ce5-50d2e1f8e07b"
+      ],
+      "description": "Mark published, store analytics, run performance analysis and save insights"
+    }
+  ],
+  "meta": {
+    "instanceId": "b9fb3cdf868e9dfec465e3c0424216039838facbcaef324bb65eb067f69e4271"
+  }
+}
