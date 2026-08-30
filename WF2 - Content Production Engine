@@ -199,7 +199,10 @@
       "position": [
         784,
         336
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -214,6 +217,9 @@
         640,
         544
       ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -223,7 +229,8 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}"
+        "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}",
+        "autoFix": true
       },
       "id": "3457af5c-8cc1-4e8e-ada4-614204ffcecc",
       "name": "Content Parser",
@@ -321,7 +328,10 @@
       "position": [
         1360,
         336
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -336,6 +346,9 @@
         1216,
         544
       ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -345,7 +358,8 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\"passed\":true,\"overall_quality\":85,\"clarity\":9,\"usefulness\":9,\"originality\":8,\"audience_relevance\":9,\"factual_accuracy\":9,\"positioning_consistency\":9,\"ai_sounding_language\":2,\"unsupported_claims\":0,\"jargon\":1,\"feedback\":\"string\"}"
+        "jsonSchemaExample": "{\"passed\":true,\"overall_quality\":85,\"clarity\":9,\"usefulness\":9,\"originality\":8,\"audience_relevance\":9,\"factual_accuracy\":9,\"positioning_consistency\":9,\"ai_sounding_language\":2,\"unsupported_claims\":0,\"jargon\":1,\"feedback\":\"string\"}",
+        "autoFix": true
       },
       "id": "b0d64ab9-a03c-49cb-aaad-fda20699e11d",
       "name": "Quality Parser",
@@ -405,7 +419,10 @@
       "position": [
         1936,
         224
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -420,6 +437,9 @@
         1952,
         432
       ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -429,7 +449,8 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}"
+        "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}",
+        "autoFix": true
       },
       "id": "88418d02-2307-4e47-b92d-359461c0359f",
       "name": "Regenerate Parser",
@@ -607,7 +628,10 @@
       "position": [
         3984,
         224
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -622,6 +646,9 @@
         3936,
         528
       ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -631,7 +658,8 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\"needs_visual\":true,\"visual_format\":\"workflow diagram\",\"reason\":\"string\"}"
+        "jsonSchemaExample": "{\"needs_visual\":true,\"visual_format\":\"workflow diagram\",\"reason\":\"string\"}",
+        "autoFix": true
       },
       "id": "fd70885e-e00a-495b-8a62-b295b5c2c802",
       "name": "Visual Strategy Parser",
@@ -658,7 +686,10 @@
       "position": [
         4336,
         224
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -673,6 +704,9 @@
         4240,
         480
       ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -682,7 +716,8 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\"visual_type\":\"workflow diagram\",\"concept\":\"string\",\"layout\":\"string\",\"required_elements\":\"string\",\"visual_text\":\"string\",\"style\":\"string\",\"aspect_ratio\":\"1:1\",\"gamma_prompt\":\"string\"}"
+        "jsonSchemaExample": "{\"visual_type\":\"workflow diagram\",\"concept\":\"string\",\"layout\":\"string\",\"required_elements\":\"string\",\"visual_text\":\"string\",\"style\":\"string\",\"aspect_ratio\":\"1:1\",\"gamma_prompt\":\"string\"}",
+        "autoFix": true
       },
       "id": "ba02a545-9a89-4eb1-8fad-b5020857f30b",
       "name": "Visual Prompt Parser",
@@ -939,6 +974,11 @@
             "node": "AI - LinkedIn Content Generator",
             "type": "ai_languageModel",
             "index": 0
+          },
+          {
+            "node": "Content Parser",
+            "type": "ai_languageModel",
+            "index": 0
           }
         ]
       ]
@@ -981,6 +1021,11 @@
         [
           {
             "node": "AI - Content Quality Check",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Quality Parser",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -1032,6 +1077,11 @@
         [
           {
             "node": "AI - Regenerate Content",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Regenerate Parser",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -1111,6 +1161,11 @@
             "node": "AI - Visual Strategy",
             "type": "ai_languageModel",
             "index": 0
+          },
+          {
+            "node": "Visual Strategy Parser",
+            "type": "ai_languageModel",
+            "index": 0
           }
         ]
       ]
@@ -1142,6 +1197,11 @@
         [
           {
             "node": "AI - Generate Visual Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Visual Prompt Parser",
             "type": "ai_languageModel",
             "index": 0
           }
