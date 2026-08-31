@@ -5,7 +5,7 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 7
+              "triggerAtHour": 9
             }
           ]
         }
@@ -15,8 +15,8 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.4,
       "position": [
-        400,
-        -336
+        -560,
+        -64
       ]
     },
     {
@@ -40,8 +40,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        224,
-        96
+        -240,
+        -64
       ],
       "alwaysOutputData": true,
       "credentials": {
@@ -81,8 +81,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        448,
-        96
+        -16,
+        -64
       ]
     },
     {
@@ -98,8 +98,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        672,
-        192
+        208,
+        32
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
@@ -122,8 +122,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        896,
-        192
+        432,
+        32
       ],
       "executeOnce": true,
       "credentials": {
@@ -145,8 +145,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1120,
-        192
+        656,
+        32
       ],
       "executeOnce": true,
       "credentials": {
@@ -168,8 +168,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1344,
-        192
+        880,
+        32
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
@@ -189,8 +189,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1568,
-        192
+        1104,
+        32
       ]
     },
     {
@@ -223,8 +223,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1792,
-        192
+        1328,
+        32
       ]
     },
     {
@@ -270,8 +270,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        2240,
-        96
+        1776,
+        -64
       ]
     },
     {
@@ -323,8 +323,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2016,
-        288
+        1552,
+        128
       ],
       "credentials": {
         "supabaseApi": {
@@ -376,8 +376,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        2240,
-        288
+        1776,
+        128
       ]
     },
     {
@@ -413,8 +413,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        672,
-        0
+        208,
+        -160
       ],
       "credentials": {
         "supabaseApi": {
@@ -430,8 +430,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2464,
-        192
+        2000,
+        32
       ]
     },
     {
@@ -440,7 +440,7 @@
         "text": "=Generate research queries for today.\nAUDIENCE: {{ $json.audience_name }}\nPILLAR: {{ $json.pillar_name }}\nBRAND EXPERTISE: {{ JSON.stringify($(\"Get Brand Profile\").first().json) }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "Generate 5-10 specific, high-signal search queries for creating LinkedIn content for Ntein Praises (AI Automation Engineer). Base them on today's audience, today's content pillar, Ntein's expertise, AI automation, business automation, workflow automation, AI agents, software, current industry developments, business problems, and relevant trends. Queries must be specific and useful for content research. Return a queries array."
+          "systemMessage": "Generate EXACTLY 3 specific, high-signal search queries for creating LinkedIn content for Ntein Praises (AI Automation Engineer). Base them on today's audience, today's content pillar, Ntein's expertise, AI automation, business automation, workflow automation, AI agents, software, current industry developments, business problems, and relevant trends. Queries must be specific and useful for content research. Return a queries array with exactly 3 items."
         }
       },
       "id": "de62b5cd-d865-4e6a-beb3-2a70cb1cef0f",
@@ -448,9 +448,12 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        768,
-        0
-      ]
+        2368,
+        -160
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 8000
     },
     {
       "parameters": {
@@ -462,9 +465,12 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        784,
-        224
+        2384,
+        64
       ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 8000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -481,8 +487,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        912,
-        224
+        2512,
+        64
       ]
     },
     {
@@ -497,8 +503,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1120,
-        0
+        2720,
+        -160
       ]
     },
     {
@@ -532,8 +538,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        1344,
-        384
+        2944,
+        224
       ],
       "alwaysOutputData": true,
       "credentials": {
@@ -552,21 +558,21 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1568,
-        384
+        3168,
+        224
       ]
     },
     {
       "parameters": {
-        "jsCode": "\nfunction hashOf(str) {\n  let h = 0;\n  const s = String(str || '');\n  for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; }\n  return 'h' + (h >>> 0).toString(16);\n}\n\nconst existing = $('Get Existing Research').all()\n  .map(i => i.json && i.json.hash)\n  .filter(Boolean);\nconst existingSet = new Set(existing);\n\nconst seen = new Set();\nconst newItems = [];\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  if (!r.url && !r.title) continue;\n  const hash = hashOf((r.url || '') + '|' + (r.title || ''));\n  if (existingSet.has(hash) || seen.has(hash)) continue;\n  seen.add(hash);\n  newItems.push({\n    title: r.title || '',\n    url: r.url || '',\n    source: r.source || '',\n    published_date: r.published_date || null,\n    summary: r.summary || '',\n    content: r.content || '',\n    category: r.category || '',\n    hash,\n  });\n}\n\nconst capped = newItems.slice(0, 8);\nreturn [{ json: { count: capped.length, newItems: capped } }];\n"
+        "jsCode": "\nfunction hashOf(str) {\n  let h = 0;\n  const s = String(str || '');\n  for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; }\n  return 'h' + (h >>> 0).toString(16);\n}\n\nconst existing = $('Get Existing Research').all()\n  .map(i => i.json && i.json.hash)\n  .filter(Boolean);\nconst existingSet = new Set(existing);\n\nconst seen = new Set();\nconst newItems = [];\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  if (!r.url && !r.title) continue;\n  const hash = hashOf((r.url || '') + '|' + (r.title || ''));\n  if (existingSet.has(hash) || seen.has(hash)) continue;\n  seen.add(hash);\n  newItems.push({\n    title: r.title || '',\n    url: r.url || '',\n    source: r.source || '',\n    published_date: r.published_date || null,\n    summary: r.summary || '',\n    content: r.content || '',\n    category: r.category || '',\n    hash,\n  });\n}\n\nconst capped = newItems.slice(0, 3);\nreturn [{ json: { count: capped.length, newItems: capped } }];\n"
       },
       "id": "67911107-5a58-46db-9943-48fb583f75c9",
       "name": "Dedupe Research",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1744,
-        96
+        3344,
+        -64
       ]
     },
     {
@@ -598,8 +604,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1968,
-        96
+        3568,
+        -64
       ]
     },
     {
@@ -612,8 +618,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        2192,
-        192
+        3792,
+        32
       ]
     },
     {
@@ -636,8 +642,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2688,
-        -256
+        4432,
+        272
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
@@ -650,15 +656,49 @@
     },
     {
       "parameters": {
-        "jsCode": "\nconst rows = $input.all().map(i => i.json).filter(r => r && r.id);\n\nlet best = null;\nlet bestScore = -1;\nfor (const row of rows) {\n  const score = Number(row.overall_score ?? 0);\n  if (score > bestScore) {\n    bestScore = score;\n    best = row;\n  }\n}\n\nconst ctx = $('Calendar Context').first().json;\nreturn [{ json: {\n  opportunity_id: best ? best.id : null,\n  overall_score: bestScore,\n  calendar_id: ctx.calendar_id,\n  audience_id: ctx.audience_id,\n  pillar_id: ctx.pillar_id,\n}}];\n"
+        "jsCode": "\nconst rows = $input.all().map(i => i.json).filter(r => r && r.id);\n\nlet best = null;\nlet bestScore = -1;\nfor (const row of rows) {\n  const score = Number(row.overall_score ?? 0);\n  if (score > bestScore) {\n    bestScore = score;\n    best = row;\n  }\n}\n\nconst ctx = $('Calendar Context').first().json;\nreturn [{ json: {\n  opportunity_id: best ? best.id : null,\n  overall_score: bestScore,\n  calendar_id: ctx.calendar_id,\n  audience_id: ctx.audience_id,\n  pillar_id: ctx.pillar_id,\n  has_opportunity: best ? true : false,\n}}];\n"
       },
       "id": "d6a38e53-91ba-4c70-93e5-f90886a25f8d",
       "name": "Select Best Opportunity",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2320,
-        0
+        4704,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "hasOpp",
+              "leftValue": "={{ $json.has_opportunity }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c1e6b0a2-4d3f-4a1b-9c2e-8f0a1b2c3d4e",
+      "name": "Has Opportunity?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4656,
+        -576
       ]
     },
     {
@@ -693,8 +733,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2544,
-        0
+        4816,
+        -160
       ],
       "credentials": {
         "supabaseApi": {
@@ -768,8 +808,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        2768,
-        0
+        5040,
+        -160
       ]
     },
     {
@@ -813,8 +853,59 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5104,
-        -304
+        5408,
+        -160
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "ufzzbjeww5HWPvxb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "automation_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $(\"Get Brand Profile\").first().json.user_id }}"
+            },
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "WF1 - Intelligence & Research Engine"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "no_op"
+            },
+            {
+              "fieldId": "error",
+              "fieldValue": "No scored opportunities (all analysis attempts failed, likely Gemini 503)"
+            },
+            {
+              "fieldId": "calendar_id",
+              "fieldValue": "={{ $(\"Calendar Context\").first().json.calendar_id }}"
+            },
+            {
+              "fieldId": "execution_id",
+              "fieldValue": "={{ $execution.id }}"
+            },
+            {
+              "fieldId": "ran_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "d2f7c1b3-5e4a-4b2c-8d3f-9a0b1c2d3e4f",
+      "name": "Log No Opportunity",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5008,
+        -480
       ],
       "credentials": {
         "supabaseApi": {
@@ -832,10 +923,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2688,
-        192
+        5376,
+        256
       ],
-      "webhookId": "30c79b3a-d91d-4180-a95a-f9c3dc3541f8"
+      "webhookId": "5bbaf22c-e35c-42ce-8614-397cfbc3f985"
     },
     {
       "parameters": {
@@ -886,8 +977,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2416,
-        192
+        4688,
+        32
       ],
       "credentials": {
         "supabaseApi": {
@@ -910,9 +1001,13 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1792,
-        0
-      ]
+        4064,
+        -160
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 8000,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -924,9 +1019,12 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        1808,
-        224
+        3408,
+        688
       ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 8000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -943,8 +1041,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1936,
-        224
+        4208,
+        64
       ]
     },
     {
@@ -961,9 +1059,13 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        2144,
-        0
-      ]
+        4416,
+        -160
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 8000,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -975,9 +1077,12 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        2160,
-        224
+        4432,
+        64
       ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 8000,
       "credentials": {
         "googlePalmApi": {
           "id": "QNmeIvFjzPFEgrfE",
@@ -994,8 +1099,52 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2288,
-        224
+        4560,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "topicOk",
+              "leftValue": "={{ $(\"AI - Analyze Research\").item.json.output?.main_topic }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "scoreOk",
+              "leftValue": "={{ $(\"AI - Score Opportunity\").item.json.output?.overall_score }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e5f8a9b0-1c2d-4e3f-8a4b-5c6d7e8f9a0b",
+      "name": "Analysis Succeeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5296,
+        -176
       ]
     },
     {
@@ -1079,8 +1228,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2496,
-        0
+        4768,
+        -160
       ],
       "credentials": {
         "supabaseApi": {
@@ -1098,8 +1247,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2464,
-        384
+        4544,
+        -352
       ]
     },
     {
@@ -1143,8 +1292,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2192,
-        0
+        3792,
+        -160
       ],
       "credentials": {
         "supabaseApi": {
@@ -1433,7 +1582,25 @@
       "main": [
         [
           {
+            "node": "Has Opportunity?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Opportunity?": {
+      "main": [
+        [
+          {
             "node": "Calendar Opportunity Selected",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No Opportunity",
             "type": "main",
             "index": 0
           }
@@ -1521,7 +1688,7 @@
       "main": [
         [
           {
-            "node": "Save Opportunity",
+            "node": "Analysis Succeeded?",
             "type": "main",
             "index": 0
           }
@@ -1545,6 +1712,24 @@
           {
             "node": "AI - Score Opportunity",
             "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analysis Succeeded?": {
+      "main": [
+        [
+          {
+            "node": "Save Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analysis Loop",
+            "type": "main",
             "index": 0
           }
         ]
@@ -1611,7 +1796,7 @@
         "47a7f3ea-ebcd-46a1-8dd8-1626dfe16724",
         "dfd151c1-d73e-45b1-a45f-f7e40bb8e7fa"
       ],
-      "description": "Generate 5-10 focused research queries for today"
+      "description": "Generate exactly 3 focused research queries for today"
     },
     {
       "id": "2caa1c86-0050-4b37-9cd5-45fa50b7aaa3",
@@ -1624,7 +1809,7 @@
         "1548e83e-2a2c-465e-b029-228b8ad94dba",
         "a51d1829-1edb-473e-9615-b34c69cb73f6"
       ],
-      "description": "Search the web with Tavily, extract cited sources, dedupe by hash"
+      "description": "Search the web with Tavily, extract cited sources, dedupe by hash (cap 3 items)"
     }
   ],
   "meta": {
