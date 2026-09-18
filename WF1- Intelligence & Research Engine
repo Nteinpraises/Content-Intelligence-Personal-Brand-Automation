@@ -10,20 +10,20 @@
           ]
         }
       },
-      "id": "5925d2dc-54e4-482d-9434-51492f2154fb",
+      "id": "29b121b4-7e5d-4ddd-acd9-1c0b840718cc",
       "name": "Every Morning",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.4,
       "position": [
-        -560,
-        -64
+        -4160,
+        48
       ]
     },
     {
       "parameters": {
         "operation": "getAll",
         "tableId": "brand_profiles",
-        "limit": 1,
+        "limit": "={{ 1 }}",
         "matchType": "allFilters",
         "filters": {
           "conditions": [
@@ -35,19 +35,19 @@
           ]
         }
       },
-      "id": "21602b53-18d9-48c0-95ea-1ebbb804a959",
+      "id": "46250193-f9ca-4a63-8f8d-c70b675ac337",
       "name": "Get Brand Profile",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -240,
-        -64
+        -4992,
+        512
       ],
       "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -76,13 +76,13 @@
         },
         "options": {}
       },
-      "id": "f7a12630-1824-4001-9be3-ff97a9399a2c",
+      "id": "5f6246b8-ea78-40d6-8e60-aca9e0f2147e",
       "name": "Has Brand Profile?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -16,
-        -64
+        -4768,
+        512
       ]
     },
     {
@@ -93,20 +93,20 @@
         "orderBy": "date.desc",
         "filterType": "none"
       },
-      "id": "9ec1940d-10c9-4861-8191-fdde861def95",
+      "id": "133120ed-24d7-49a9-ad97-a471066dd46c",
       "name": "Get Recent Calendar",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        208,
-        32
+        -4544,
+        608
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -117,19 +117,19 @@
         "returnAll": true,
         "filterType": "none"
       },
-      "id": "c9d34e4e-6a36-47be-b40c-d7c60334a3e1",
+      "id": "ab821ca1-88f0-41df-b32e-07347e5bfed7",
       "name": "Get Audiences",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        432,
-        32
+        -4320,
+        608
       ],
       "executeOnce": true,
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -140,19 +140,19 @@
         "returnAll": true,
         "filterType": "none"
       },
-      "id": "89659242-2c2c-4629-93b6-23d38dda0d06",
+      "id": "2b84b1c3-3be0-4fff-bc2a-b6deae6cf2c0",
       "name": "Get Pillars",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        656,
-        32
+        -4096,
+        608
       ],
       "executeOnce": true,
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -163,20 +163,20 @@
         "limit": 500,
         "filterType": "none"
       },
-      "id": "2d310538-0b52-45bf-b5a2-d66f64aa067e",
+      "id": "9257abd8-00f3-4231-b7f8-32e4d83d9f39",
       "name": "Get Existing Research",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        880,
-        32
+        -3872,
+        608
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -184,13 +184,13 @@
       "parameters": {
         "jsCode": "\nconst today = $now.toFormat('yyyy-MM-dd');\nconst recent = $('Get Recent Calendar').all().map(i => i.json).filter(r => r && r.id);\nconst audiences = $('Get Audiences').all().map(a => a.json).filter(a => a && a.id);\nconst pillars = $('Get Pillars').all().map(p => p.json).filter(p => p && p.id);\n\nconst existing = recent.find(r => (r.date || '').slice(0,10) === today);\nif (existing) {\n  return [{ json: {\n    exists: true,\n    calendar_id: existing.id,\n    audience_id: existing.audience_id || null,\n    pillar_id: existing.pillar_id || null,\n    audience_name: existing.audience_name || null,\n    pillar_name: existing.pillar_name || null,\n    objective: existing.objective || 'Educate and build authority',\n    date: today,\n  }}];\n}\n\nconst lastAudience = recent.length ? recent[0].audience_name : null;\nconst lastPillar = recent.length ? recent[0].pillar_name : null;\n\nfunction pickLeastUsed(list, key, avoid) {\n  const counts = list.map(item => {\n    const name = item.name;\n    let idx = recent.findIndex(r => r[key] === name);\n    if (idx === -1) idx = 999;\n    return { item, staleness: idx, name };\n  });\n  const filtered = counts.filter(c => c.name !== avoid);\n  const pool = filtered.length ? filtered : counts;\n  pool.sort((a, b) => b.staleness - a.staleness);\n  return pool[0].item;\n}\n\nconst audience = pickLeastUsed(audiences, 'audience_name', lastAudience);\nconst pillar = pickLeastUsed(pillars, 'pillar_name', lastPillar);\n\nreturn [{ json: {\n  exists: false,\n  calendar_id: null,\n  audience_id: audience.id,\n  pillar_id: pillar.id,\n  audience_name: audience.name,\n  pillar_name: pillar.name,\n  objective: 'Educate and build authority',\n  date: today,\n}}];\n"
       },
-      "id": "88f5aa05-81fd-4533-abba-fd2c2e9ff1f6",
+      "id": "a69523e2-7e02-4be9-b524-f22403dcd40b",
       "name": "Resolve Today Plan",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1104,
-        32
+        -3648,
+        608
       ]
     },
     {
@@ -218,13 +218,13 @@
         },
         "options": {}
       },
-      "id": "7a343b24-62d6-4839-bfc0-c3588ad733be",
+      "id": "de6dc81f-fbd4-4240-8568-506fdc731a1f",
       "name": "Calendar Exists?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1328,
-        32
+        -3424,
+        608
       ]
     },
     {
@@ -265,13 +265,13 @@
         },
         "options": {}
       },
-      "id": "27048254-57b8-435d-87f7-6bfc50265c21",
+      "id": "c0ffd975-4af3-4d05-966d-f75ff9475f12",
       "name": "Context (Existing)",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1776,
-        -64
+        -2976,
+        512
       ]
     },
     {
@@ -318,18 +318,18 @@
           ]
         }
       },
-      "id": "4b4865e4-6f5a-4bb1-9331-e66528578384",
+      "id": "b47d7a6d-d136-42ad-9788-093537b76c22",
       "name": "Create Calendar Plan",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1552,
-        128
+        -3200,
+        704
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -371,13 +371,13 @@
         },
         "options": {}
       },
-      "id": "a0111904-5a5f-46fc-95b2-36c7afc4f588",
+      "id": "51d9d0d3-7ac2-40d8-9979-e31bbaa77150",
       "name": "Context (New)",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1776,
-        128
+        -2976,
+        704
       ]
     },
     {
@@ -408,30 +408,30 @@
           ]
         }
       },
-      "id": "3a8ec404-c087-4a18-89a4-fd97e7565a6d",
+      "id": "d3a9ed3a-4531-4872-a034-122f895970f5",
       "name": "Log No Brand Profile",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        208,
-        -160
+        -4544,
+        416
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
     {
       "parameters": {},
-      "id": "48118bdd-640c-492d-91ab-313ea7ff722f",
+      "id": "e7daa18e-0ec5-45c9-b88c-5100ebe25035",
       "name": "Calendar Context",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2000,
-        32
+        -2752,
+        608
       ]
     },
     {
@@ -443,38 +443,34 @@
           "systemMessage": "Generate EXACTLY 3 specific, high-signal search queries for creating LinkedIn content for Ntein Praises (AI Automation Engineer). Base them on today's audience, today's content pillar, Ntein's expertise, AI automation, business automation, workflow automation, AI agents, software, current industry developments, business problems, and relevant trends. Queries must be specific and useful for content research. Return a queries array with exactly 3 items."
         }
       },
-      "id": "de62b5cd-d865-4e6a-beb3-2a70cb1cef0f",
+      "id": "7cb9aedb-abbb-4f48-a929-b3c47b6b1891",
       "name": "AI - Generate Research Queries",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        2368,
-        -160
+        -2384,
+        416
       ],
-      "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 8000
+      "retryOnFail": true
     },
     {
       "parameters": {
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "efd497b1-4e42-4073-b42e-02b1ea5e4c04",
+      "id": "ee5c0574-f937-4bfb-b0a1-1f608c0ba268",
       "name": "Queries Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        2384,
-        64
+        -2368,
+        640
       ],
       "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 8000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -482,13 +478,13 @@
       "parameters": {
         "jsonSchemaExample": "{\"queries\":[\"query one\",\"query two\"]}"
       },
-      "id": "47a7f3ea-ebcd-46a1-8dd8-1626dfe16724",
+      "id": "7e51f57f-09f7-441f-be14-3db9c061e842",
       "name": "Queries Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2512,
-        64
+        -2240,
+        640
       ]
     },
     {
@@ -498,13 +494,13 @@
           "destinationFieldName": "query"
         }
       },
-      "id": "dfd151c1-d73e-45b1-a45f-f7e40bb8e7fa",
+      "id": "53604d64-3f4c-4a2d-a3d4-951a002cf962",
       "name": "Split Queries",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        2720,
-        -160
+        -2032,
+        416
       ]
     },
     {
@@ -533,19 +529,19 @@
           }
         }
       },
-      "id": "14afcb71-e7df-4081-ba3b-b9097d3e4489",
+      "id": "e56a2146-5967-47da-b0ff-f1110984357b",
       "name": "Web Search (Tavily)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        2944,
-        224
+        -1808,
+        800
       ],
       "alwaysOutputData": true,
       "credentials": {
         "httpTemplatedCustomAuth": {
-          "id": "VAkLckegS00vV6nT",
-          "name": "Tavily API (npraises670)"
+          "id": "kOsQumwt11imsuLY",
+          "name": "Tavily API (eterna)"
         }
       }
     },
@@ -553,26 +549,26 @@
       "parameters": {
         "jsCode": "\nconst items = [];\nfor (const it of $input.all()) {\n  const resp = it.json || {};\n  const results = resp.results || [];\n  for (const r of results) {\n    if (!r.url && !r.title) continue;\n    const content = r.content || '';\n    items.push({ json: {\n      title: r.title || '',\n      url: r.url || '',\n      source: r.title || '',\n      published_date: r.published_date || null,\n      summary: content.slice(0, 800),\n      content: content,\n      category: '',\n    }});\n  }\n}\nreturn items;\n"
       },
-      "id": "fed04b8e-d706-47f6-bc46-3fbc501e783b",
+      "id": "f779f731-ed6b-4bd9-a29c-462921763363",
       "name": "Extract Sources",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3168,
-        224
+        -1584,
+        800
       ]
     },
     {
       "parameters": {
         "jsCode": "\nfunction hashOf(str) {\n  let h = 0;\n  const s = String(str || '');\n  for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; }\n  return 'h' + (h >>> 0).toString(16);\n}\n\nconst existing = $('Get Existing Research').all()\n  .map(i => i.json && i.json.hash)\n  .filter(Boolean);\nconst existingSet = new Set(existing);\n\nconst seen = new Set();\nconst newItems = [];\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  if (!r.url && !r.title) continue;\n  const hash = hashOf((r.url || '') + '|' + (r.title || ''));\n  if (existingSet.has(hash) || seen.has(hash)) continue;\n  seen.add(hash);\n  newItems.push({\n    title: r.title || '',\n    url: r.url || '',\n    source: r.source || '',\n    published_date: r.published_date || null,\n    summary: r.summary || '',\n    content: r.content || '',\n    category: r.category || '',\n    hash,\n  });\n}\n\nconst capped = newItems.slice(0, 3);\nreturn [{ json: { count: capped.length, newItems: capped } }];\n"
       },
-      "id": "67911107-5a58-46db-9943-48fb583f75c9",
+      "id": "c1f6bfda-2206-4c93-bfb2-554f87bdd500",
       "name": "Dedupe Research",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3344,
-        -64
+        -1312,
+        672
       ]
     },
     {
@@ -599,13 +595,13 @@
         },
         "options": {}
       },
-      "id": "b8c5e27c-6850-4930-b33c-afc555a3da0b",
+      "id": "28155c66-6775-4c80-8992-71871d8f32db",
       "name": "Has New Research?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3568,
-        -64
+        -1184,
+        512
       ]
     },
     {
@@ -613,13 +609,13 @@
         "fieldToSplitOut": "newItems",
         "options": {}
       },
-      "id": "a51d1829-1edb-473e-9615-b34c69cb73f6",
+      "id": "3a109d76-2e37-4afc-9ccc-f4516b0336df",
       "name": "Split New Research",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        3792,
-        32
+        -960,
+        608
       ]
     },
     {
@@ -637,20 +633,20 @@
           ]
         }
       },
-      "id": "b5c82b4e-bff1-43de-baac-86965ca7a97a",
+      "id": "7fba8045-b935-4ff3-a9b4-b98d7c18d29d",
       "name": "Get Today Opportunities",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4432,
-        272
+        -464,
+        400
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -658,13 +654,13 @@
       "parameters": {
         "jsCode": "\nconst rows = $input.all().map(i => i.json).filter(r => r && r.id);\n\nlet best = null;\nlet bestScore = -1;\nfor (const row of rows) {\n  const score = Number(row.overall_score ?? 0);\n  if (score > bestScore) {\n    bestScore = score;\n    best = row;\n  }\n}\n\nconst ctx = $('Calendar Context').first().json;\nreturn [{ json: {\n  opportunity_id: best ? best.id : null,\n  overall_score: bestScore,\n  calendar_id: ctx.calendar_id,\n  audience_id: ctx.audience_id,\n  pillar_id: ctx.pillar_id,\n  has_opportunity: best ? true : false,\n}}];\n"
       },
-      "id": "d6a38e53-91ba-4c70-93e5-f90886a25f8d",
+      "id": "5e3e0eb3-6bed-4d36-b169-514c92c28363",
       "name": "Select Best Opportunity",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4704,
-        272
+        -240,
+        400
       ]
     },
     {
@@ -692,13 +688,13 @@
         },
         "options": {}
       },
-      "id": "c1e6b0a2-4d3f-4a1b-9c2e-8f0a1b2c3d4e",
+      "id": "c78ddebc-dbd0-4257-bad4-37ef0541a1df",
       "name": "Has Opportunity?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4656,
-        -576
+        48,
+        400
       ]
     },
     {
@@ -728,18 +724,18 @@
           ]
         }
       },
-      "id": "885f4c88-c850-4fc9-bc5e-2a9e8d516b66",
+      "id": "c7f9ae12-eb75-4b7d-9c27-b636ebfc2735",
       "name": "Calendar Opportunity Selected",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4816,
-        -160
+        400,
+        592
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -748,8 +744,8 @@
         "workflowId": {
           "__rl": true,
           "mode": "id",
-          "value": "ormN681TBCmAE0ex",
-          "cachedResultName": "WF2 - Content Production Engine"
+          "value": "SdB3h6wSkx5O9ZPp",
+          "cachedResultName": "WF-2"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -803,13 +799,13 @@
         },
         "options": {}
       },
-      "id": "b780554a-6374-4ee7-bfd8-e99b992770f0",
+      "id": "3158ab3c-8446-40fc-8d5d-cd2e0ad15af4",
       "name": "Trigger WF2 - Content Production",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        5040,
-        -160
+        688,
+        592
       ]
     },
     {
@@ -848,18 +844,18 @@
           ]
         }
       },
-      "id": "a0a4b6a0-95d7-4fb5-b545-ded6a8f7ecf9",
+      "id": "95c7a084-7f42-4ecb-bf86-fbf3aa3f65c9",
       "name": "Log Run Success",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5408,
-        -160
+        912,
+        592
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -899,18 +895,18 @@
           ]
         }
       },
-      "id": "d2f7c1b3-5e4a-4b2c-8d3f-9a0b1c2d3e4f",
+      "id": "ad97d670-14de-4eb5-9e76-2a6766d05f41",
       "name": "Log No Opportunity",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5008,
-        -480
+        400,
+        400
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -918,15 +914,15 @@
       "parameters": {
         "amount": 30
       },
-      "id": "55483d93-7992-40d9-9bbe-38711d0e56a6",
+      "id": "01aaf5cc-e381-4973-b9b7-dec8118b923d",
       "name": "Pace (Gemini free tier)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        5376,
-        256
+        -464,
+        112
       ],
-      "webhookId": "5bbaf22c-e35c-42ce-8614-397cfbc3f985"
+      "webhookId": "e1d1e948-78b2-4ecf-95fa-7629339e01a0"
     },
     {
       "parameters": {
@@ -972,18 +968,18 @@
           ]
         }
       },
-      "id": "ee489241-26e6-418c-b543-3017ef597151",
+      "id": "ba4ce39e-4775-436d-9024-fb241de3ee86",
       "name": "Save Research",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4688,
-        32
+        -240,
+        112
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -996,39 +992,33 @@
           "systemMessage": "Analyze this research item for LinkedIn content. Determine main topic, important facts, useful statistics, business implications, emerging trend, potential discussion, relevance to Ntein's audience, relevance to the selected pillar, potential content angle, potential hook, and recommended format. NEVER invent facts or statistics — only use statistics that are supported by the provided source. Leave useful_statistics empty if none are supported."
         }
       },
-      "id": "5fa837f2-4c04-47d3-8789-a88e3ecbe7fa",
+      "id": "cf99d776-2bda-45dd-8ee0-cfbaa60a718f",
       "name": "AI - Analyze Research",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        4064,
-        -160
+        -16,
+        0
       ],
       "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 8000,
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "960d7804-880e-443e-9bef-f9b505d99590",
-      "name": "Analyze Model",
+      "id": "b8ee264e-01ff-4b26-bc7d-c8b9df60f869",
+      "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        3408,
-        688
+        -16,
+        240
       ],
-      "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 8000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -1036,13 +1026,13 @@
       "parameters": {
         "jsonSchemaExample": "{\"main_topic\":\"string\",\"important_facts\":\"string\",\"useful_statistics\":\"string\",\"business_implications\":\"string\",\"emerging_trend\":\"string\",\"potential_discussion\":\"string\",\"audience_relevance\":\"string\",\"pillar_relevance\":\"string\",\"content_angle\":\"string\",\"potential_hook\":\"string\",\"recommended_format\":\"text\"}"
       },
-      "id": "6be8ba9d-5524-414c-a5c3-154a6ddc6e25",
+      "id": "87ceec64-e320-447a-a540-827100fde8f2",
       "name": "Analyze Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        4208,
-        64
+        128,
+        240
       ]
     },
     {
@@ -1054,17 +1044,15 @@
           "systemMessage": "Score this content opportunity on relevance_score, timeliness_score, business_value_score, originality_score, and evidence_score (each 0-100), then compute overall_score (0-100) as a weighted blend. Reward strong, source-backed evidence and penalize weak or unsupported items."
         }
       },
-      "id": "7733b7f3-3a1c-45f4-8a5b-88898b8f539e",
+      "id": "b80e4276-4027-4d70-b086-05b0fc0fc328",
       "name": "AI - Score Opportunity",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        4416,
-        -160
+        336,
+        0
       ],
       "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 8000,
       "onError": "continueRegularOutput"
     },
     {
@@ -1072,21 +1060,19 @@
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "65a58177-49c0-4239-819f-37833b0ceef5",
+      "id": "b4d3b8ad-3221-48b2-9ab5-3348cbae5af8",
       "name": "Score Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        4432,
-        64
+        352,
+        240
       ],
       "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 8000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -1094,13 +1080,13 @@
       "parameters": {
         "jsonSchemaExample": "{\"relevance_score\":0,\"timeliness_score\":0,\"business_value_score\":0,\"originality_score\":0,\"evidence_score\":0,\"overall_score\":0}"
       },
-      "id": "7dc8a5b1-beef-4e84-94e3-c6affb7c0b16",
+      "id": "60c847ff-64d4-4cdf-87a1-f548b3232f69",
       "name": "Score Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        4560,
-        64
+        480,
+        240
       ]
     },
     {
@@ -1138,13 +1124,13 @@
         },
         "options": {}
       },
-      "id": "e5f8a9b0-1c2d-4e3f-8a4b-5c6d7e8f9a0b",
+      "id": "c809525b-f388-41a3-8dfb-59ea6f5d80e4",
       "name": "Analysis Succeeded?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        5296,
-        -176
+        688,
+        112
       ]
     },
     {
@@ -1223,18 +1209,18 @@
           ]
         }
       },
-      "id": "62cb7954-f8e7-46bb-8295-f55239357061",
+      "id": "8190900d-4179-4ef2-ae7f-b3734342cedb",
       "name": "Save Opportunity",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4768,
-        -160
+        912,
+        112
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1242,13 +1228,13 @@
       "parameters": {
         "options": {}
       },
-      "id": "eb2c87d8-f1b4-401c-ad98-0a58a98dfd0d",
+      "id": "db3fa0e6-868e-419b-b127-588550a50294",
       "name": "Analysis Loop",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        4544,
-        -352
+        -688,
+        352
       ]
     },
     {
@@ -1287,18 +1273,18 @@
           ]
         }
       },
-      "id": "1548e83e-2a2c-465e-b029-228b8ad94dba",
+      "id": "99d13486-8eef-4ff6-97e0-735d9402d996",
       "name": "Log No New Research",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        3792,
-        -160
+        -960,
+        416
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     }
@@ -1662,7 +1648,7 @@
         ]
       ]
     },
-    "Analyze Model": {
+    "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
@@ -1768,51 +1754,52 @@
   "pinData": {},
   "nodeGroups": [
     {
-      "id": "3efb719e-b1ff-4356-9bd7-47682ab5e263",
+      "id": "cde1ffe2-9fd9-4cb3-9510-1a1c706d21d9",
       "name": "Load Strategy",
       "nodeIds": [
-        "21602b53-18d9-48c0-95ea-1ebbb804a959",
-        "f7a12630-1824-4001-9be3-ff97a9399a2c",
-        "3a8ec404-c087-4a18-89a4-fd97e7565a6d",
-        "9ec1940d-10c9-4861-8191-fdde861def95",
-        "c9d34e4e-6a36-47be-b40c-d7c60334a3e1",
-        "89659242-2c2c-4629-93b6-23d38dda0d06",
-        "2d310538-0b52-45bf-b5a2-d66f64aa067e",
-        "88f5aa05-81fd-4533-abba-fd2c2e9ff1f6",
-        "7a343b24-62d6-4839-bfc0-c3588ad733be",
-        "4b4865e4-6f5a-4bb1-9331-e66528578384",
-        "a0111904-5a5f-46fc-95b2-36c7afc4f588",
-        "27048254-57b8-435d-87f7-6bfc50265c21",
-        "48118bdd-640c-492d-91ab-313ea7ff722f"
+        "46250193-f9ca-4a63-8f8d-c70b675ac337",
+        "5f6246b8-ea78-40d6-8e60-aca9e0f2147e",
+        "d3a9ed3a-4531-4872-a034-122f895970f5",
+        "133120ed-24d7-49a9-ad97-a471066dd46c",
+        "ab821ca1-88f0-41df-b32e-07347e5bfed7",
+        "2b84b1c3-3be0-4fff-bc2a-b6deae6cf2c0",
+        "9257abd8-00f3-4231-b7f8-32e4d83d9f39",
+        "a69523e2-7e02-4be9-b524-f22403dcd40b",
+        "de6dc81f-fbd4-4240-8568-506fdc731a1f",
+        "b47d7a6d-d136-42ad-9788-093537b76c22",
+        "51d9d0d3-7ac2-40d8-9979-e31bbaa77150",
+        "c0ffd975-4af3-4d05-966d-f75ff9475f12",
+        "e7daa18e-0ec5-45c9-b88c-5100ebe25035"
       ],
       "description": "Load brand profile, resolve or create today rotated calendar plan"
     },
     {
-      "id": "87e1bc45-3129-4609-a423-2be96b59dd2a",
+      "id": "175781da-d6b8-4140-ae86-aeacb41f6138",
       "name": "Research Queries",
       "nodeIds": [
-        "de62b5cd-d865-4e6a-beb3-2a70cb1cef0f",
-        "efd497b1-4e42-4073-b42e-02b1ea5e4c04",
-        "47a7f3ea-ebcd-46a1-8dd8-1626dfe16724",
-        "dfd151c1-d73e-45b1-a45f-f7e40bb8e7fa"
+        "7cb9aedb-abbb-4f48-a929-b3c47b6b1891",
+        "ee5c0574-f937-4bfb-b0a1-1f608c0ba268",
+        "7e51f57f-09f7-441f-be14-3db9c061e842",
+        "53604d64-3f4c-4a2d-a3d4-951a002cf962"
       ],
       "description": "Generate exactly 3 focused research queries for today"
     },
     {
-      "id": "2caa1c86-0050-4b37-9cd5-45fa50b7aaa3",
+      "id": "deb3b0bb-ccac-43ff-8536-25e0efbe32b3",
       "name": "Collect & Dedupe",
       "nodeIds": [
-        "14afcb71-e7df-4081-ba3b-b9097d3e4489",
-        "fed04b8e-d706-47f6-bc46-3fbc501e783b",
-        "67911107-5a58-46db-9943-48fb583f75c9",
-        "b8c5e27c-6850-4930-b33c-afc555a3da0b",
-        "1548e83e-2a2c-465e-b029-228b8ad94dba",
-        "a51d1829-1edb-473e-9615-b34c69cb73f6"
+        "e56a2146-5967-47da-b0ff-f1110984357b",
+        "f779f731-ed6b-4bd9-a29c-462921763363",
+        "c1f6bfda-2206-4c93-bfb2-554f87bdd500",
+        "28155c66-6775-4c80-8992-71871d8f32db",
+        "99d13486-8eef-4ff6-97e0-735d9402d996",
+        "3a109d76-2e37-4afc-9ccc-f4516b0336df"
       ],
       "description": "Search the web with Tavily, extract cited sources, dedupe by hash (cap 3 items)"
     }
   ],
   "meta": {
-    "instanceId": "b9fb3cdf868e9dfec465e3c0424216039838facbcaef324bb65eb067f69e4271"
+    "templateCredsSetupCompleted": true,
+    "instanceId": "61d4b402587ea0a8e4e00ab9ed2eed997f4bbab8707dfdcaf438932bd6c82ee7"
   }
 }
