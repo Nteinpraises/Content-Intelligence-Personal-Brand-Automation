@@ -19,13 +19,13 @@
           ]
         }
       },
-      "id": "bfbf38a1-20c0-4463-b0dc-39d192ca7a0f",
+      "id": "a9388483-15bc-414c-b469-114c1b35010b",
       "name": "When Called by Another Workflow",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.2,
       "position": [
-        -384,
-        96
+        0,
+        0
       ]
     },
     {
@@ -44,18 +44,18 @@
           ]
         }
       },
-      "id": "31ab3a46-8d9e-4707-87af-a5787f2223ed",
+      "id": "5dd9608c-9569-4505-a8e3-090960bd375a",
       "name": "Get Brand Profile",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        32,
-        224
+        416,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -75,18 +75,18 @@
           ]
         }
       },
-      "id": "aa4835e4-9558-4fa7-a3b2-c08594c5a401",
+      "id": "859da021-4819-4a69-8fb9-c2be19208d62",
       "name": "Get Opportunity",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        256,
-        224
+        640,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -106,18 +106,18 @@
           ]
         }
       },
-      "id": "80c41e44-8b6e-4f37-9646-4730a3d1e74d",
+      "id": "8d1a9b60-c348-4302-a7cc-f671766fbb4e",
       "name": "Get Audience",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        480,
-        224
+        864,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -137,18 +137,18 @@
           ]
         }
       },
-      "id": "e065c3b7-4f35-4d5b-afaa-1ccab8d1664f",
+      "id": "1247e077-b9a1-45d6-81e9-8511741dfffe",
       "name": "Get Content Pillar",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        704,
-        224
+        1088,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -168,18 +168,18 @@
           ]
         }
       },
-      "id": "a36298e0-12fe-4068-b9b4-eb8822e22179",
+      "id": "724ecf7d-c8c1-42ad-8ee0-7139059f82c4",
       "name": "Get Research Source",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        928,
-        224
+        1312,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -192,38 +192,34 @@
           "systemMessage": "You are the LinkedIn ghostwriter for Ntein Praises, an AI Automation Engineer.\nWrite ONE high-quality LinkedIn post that:\n- starts with a strong hook\n- identifies a real problem or observation\n- explains the idea clearly and provides useful insight\n- uses supporting evidence ONLY when it is backed by the provided research source\n- connects naturally to Ntein's AI automation expertise\n- is understandable to non-technical business owners; avoid jargon and generic AI language\n- NEVER fabricates personal experiences, client results, statistics, or unsupported claims\n- ends with a natural CTA\nReturn every requested field. full_post must combine hook, body, cta and closing into the final post text."
         }
       },
-      "id": "06b7fc96-e323-47ee-b30a-f15e851f69f0",
+      "id": "a6bab252-cded-44ad-9a4e-39fa9c0b5c7c",
       "name": "AI - LinkedIn Content Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        784,
-        336
+        1472,
+        512
       ],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000
+      "retryOnFail": true
     },
     {
       "parameters": {
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "00c12bb3-a1be-427a-a569-1137f4934182",
+      "id": "566d5e78-aa34-4673-aacc-4c360c2085f3",
       "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        640,
-        544
+        992,
+        1184
       ],
       "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -232,13 +228,13 @@
         "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}",
         "autoFix": true
       },
-      "id": "3457af5c-8cc1-4e8e-ada4-614204ffcecc",
+      "id": "21737c72-6a99-4114-b0d1-3786ee96e8d7",
       "name": "Content Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        928,
-        560
+        1568,
+        944
       ]
     },
     {
@@ -297,18 +293,18 @@
           ]
         }
       },
-      "id": "b0a95641-cad0-46aa-be23-a409abe6ad3f",
+      "id": "5b367f62-2a7b-4767-a7eb-6943be02d8d6",
       "name": "Create Draft",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1136,
-        336
+        1904,
+        288
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -321,38 +317,34 @@
           "systemMessage": "You are a strict content editor. Score the post on clarity, usefulness, originality, audience relevance, factual accuracy, positioning consistency, AI-sounding language (lower is better), unsupported claims (count), and jargon. Set passed=false when the post is weak, generic, jargon-heavy, or contains any unsupported claim or fabricated fact/result; otherwise passed=true."
         }
       },
-      "id": "c774c8dc-bd7a-4af7-9ed6-b7f6de393d18",
+      "id": "af42e685-d7ff-49b0-bbf0-62ca9192f4ca",
       "name": "AI - Content Quality Check",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1360,
-        336
+        2288,
+        768
       ],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000
+      "retryOnFail": true
     },
     {
       "parameters": {
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "037aa223-45a4-4b42-887a-b8534724d1cf",
+      "id": "a69a1895-e3c1-4c86-b41c-2c84d40dd2f7",
       "name": "Google Gemini Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        1216,
-        544
+        2448,
+        1184
       ],
       "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -361,13 +353,13 @@
         "jsonSchemaExample": "{\"passed\":true,\"overall_quality\":85,\"clarity\":9,\"usefulness\":9,\"originality\":8,\"audience_relevance\":9,\"factual_accuracy\":9,\"positioning_consistency\":9,\"ai_sounding_language\":2,\"unsupported_claims\":0,\"jargon\":1,\"feedback\":\"string\"}",
         "autoFix": true
       },
-      "id": "b0d64ab9-a03c-49cb-aaad-fda20699e11d",
+      "id": "b558da3b-0a66-4140-95ea-7b3595860455",
       "name": "Quality Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1504,
-        560
+        2640,
+        832
       ]
     },
     {
@@ -394,13 +386,13 @@
         },
         "options": {}
       },
-      "id": "e4cf7b9d-926b-4f9d-91fc-274a7345f712",
+      "id": "c342faee-79eb-4c8b-b43d-587c92c1713b",
       "name": "Quality Insufficient?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1712,
-        336
+        2096,
+        240
       ]
     },
     {
@@ -412,38 +404,34 @@
           "systemMessage": "You are the LinkedIn ghostwriter for Ntein Praises, an AI Automation Engineer.\nWrite ONE high-quality LinkedIn post that:\n- starts with a strong hook\n- identifies a real problem or observation\n- explains the idea clearly and provides useful insight\n- uses supporting evidence ONLY when it is backed by the provided research source\n- connects naturally to Ntein's AI automation expertise\n- is understandable to non-technical business owners; avoid jargon and generic AI language\n- NEVER fabricates personal experiences, client results, statistics, or unsupported claims\n- ends with a natural CTA\nReturn every requested field. full_post must combine hook, body, cta and closing into the final post text."
         }
       },
-      "id": "cd0c5ffc-9a01-495b-8c17-426d4d5fe119",
+      "id": "3dd2c88c-8dcf-4280-a953-b1fab24a89c7",
       "name": "AI - Regenerate Content",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1936,
-        224
+        2320,
+        128
       ],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000
+      "retryOnFail": true
     },
     {
       "parameters": {
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "333ec51b-2f62-4788-b1db-497920053851",
+      "id": "08b9ed0d-4685-47e7-98ea-b709158cf5e6",
       "name": "Google Gemini Chat Model2",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        1952,
-        432
+        2336,
+        336
       ],
       "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -452,13 +440,13 @@
         "jsonSchemaExample": "{\"title\":\"string\",\"hook\":\"string\",\"body\":\"string\",\"cta\":\"string\",\"closing\":\"string\",\"hashtags\":\"string\",\"full_post\":\"string\",\"recommended_format\":\"text\"}",
         "autoFix": true
       },
-      "id": "88418d02-2307-4e47-b92d-359461c0359f",
+      "id": "790f76a5-f003-4b79-8dc4-ea21739f880a",
       "name": "Regenerate Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2080,
-        448
+        2464,
+        352
       ]
     },
     {
@@ -516,18 +504,18 @@
           ]
         }
       },
-      "id": "f28357d3-b29f-497a-b4a5-d3b877b3c61a",
+      "id": "4605035e-5287-4a2f-8b07-5ef8219d667e",
       "name": "Update Draft (Regenerated)",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2288,
-        224
+        2672,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -557,13 +545,13 @@
         },
         "options": {}
       },
-      "id": "f4951483-3257-45a2-8109-d5c527188a79",
+      "id": "bb40e315-4db6-4592-ae1b-29f84fbdb313",
       "name": "Use Regenerated Content",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        2512,
-        224
+        2896,
+        128
       ]
     },
     {
@@ -592,24 +580,24 @@
         },
         "options": {}
       },
-      "id": "87c3a25a-16a6-4cca-94a8-32fb6888b7b7",
+      "id": "c59f016a-b3c6-4bbf-9858-bbe788fad1bc",
       "name": "Use Original Content",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        2512,
-        464
+        2896,
+        368
       ]
     },
     {
       "parameters": {},
-      "id": "2f82eb54-07f3-4b36-864c-7affe280e2d7",
+      "id": "42437942-7079-49d0-8c0c-33380c3c50b3",
       "name": "Content Ready",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2736,
-        336
+        3120,
+        240
       ]
     },
     {
@@ -621,38 +609,34 @@
           "systemMessage": "Decide whether this LinkedIn post should have a visual and pick ONE visual_format from: workflow diagram, process map, architecture diagram, infographic, carousel, before/after diagram, conceptual illustration, personal image, screenshot, no visual. Rules: AI automation posts -> workflow diagram or architecture diagram; business problem posts -> before/after process diagram; educational posts -> simple explanatory diagram; personal/build-in-public posts -> personal image or simple technical visual. Set needs_visual=false and visual_format=\"no visual\" when a visual adds no value."
         }
       },
-      "id": "6b574c49-a795-428b-8bf7-b512374f634c",
+      "id": "c6da1a6a-577d-411b-9280-638e7c92b07b",
       "name": "AI - Visual Strategy",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        3984,
-        224
+        4368,
+        128
       ],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000
+      "retryOnFail": true
     },
     {
       "parameters": {
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "6bce8ee1-d324-4b89-854e-5bfa3f5624a6",
+      "id": "467801b9-a367-4853-8b5c-f06f08b2309e",
       "name": "Google Gemini Chat Model3",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        3936,
-        528
+        4320,
+        432
       ],
       "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -661,13 +645,13 @@
         "jsonSchemaExample": "{\"needs_visual\":true,\"visual_format\":\"workflow diagram\",\"reason\":\"string\"}",
         "autoFix": true
       },
-      "id": "fd70885e-e00a-495b-8a62-b295b5c2c802",
+      "id": "9a714122-8f51-43e3-bfea-3b2297c5782e",
       "name": "Visual Strategy Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        4128,
-        448
+        4512,
+        352
       ]
     },
     {
@@ -679,38 +663,34 @@
           "systemMessage": "Produce a detailed visual specification and an image generation prompt. The gamma_prompt field must clearly and vividly describe the image to generate. Keep visuals professional, minimal and readable. Do not overload diagrams with text."
         }
       },
-      "id": "5cf23a59-2ba0-43e2-9143-0717e97815ba",
+      "id": "bd72c7e8-c69a-4937-b452-406b2559f3f0",
       "name": "AI - Generate Visual Prompt",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        4336,
-        224
+        4720,
+        128
       ],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000
+      "retryOnFail": true
     },
     {
       "parameters": {
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "2adeb54d-7164-4fc2-a922-5d2c04975bc7",
+      "id": "3ef96155-1dfa-4e67-9a6b-7e051afc4862",
       "name": "Google Gemini Chat Model4",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        4240,
-        480
+        4624,
+        384
       ],
       "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -719,13 +699,13 @@
         "jsonSchemaExample": "{\"visual_type\":\"workflow diagram\",\"concept\":\"string\",\"layout\":\"string\",\"required_elements\":\"string\",\"visual_text\":\"string\",\"style\":\"string\",\"aspect_ratio\":\"1:1\",\"gamma_prompt\":\"string\"}",
         "autoFix": true
       },
-      "id": "ba02a545-9a89-4eb1-8fad-b5020857f30b",
+      "id": "00254e68-9d44-4d77-bb22-4baa3ba282a4",
       "name": "Visual Prompt Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        4480,
-        448
+        4864,
+        352
       ]
     },
     {
@@ -784,18 +764,18 @@
           ]
         }
       },
-      "id": "cf8d79d8-98a0-4c9d-bd43-7442ed47b657",
+      "id": "bcc4cf4e-ee04-4798-9f33-cc6d86c96f5d",
       "name": "Save Visual Prompt",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4688,
-        224
+        5072,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -822,18 +802,18 @@
           ]
         }
       },
-      "id": "34828fe0-f5a4-40e6-9295-d6e29ffb3b41",
+      "id": "2973b1fd-3f0f-48a2-9ffd-bd7a15e55c4e",
       "name": "Calendar Ready for Review",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5216,
-        224
+        5600,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -873,18 +853,18 @@
           ]
         }
       },
-      "id": "dd614621-7b73-4ab9-a351-a94549fe1dbe",
+      "id": "51819148-bf68-4001-9dc6-86516f529097",
       "name": "Log Automation Run",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5440,
-        224
+        5824,
+        128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     }
@@ -1243,67 +1223,7 @@
     }
   },
   "pinData": {},
-  "nodeGroups": [
-    {
-      "id": "704beb3d-c55b-4d73-b4b6-0ed0f3fbbc45",
-      "name": "Context",
-      "nodeIds": [
-        "31ab3a46-8d9e-4707-87af-a5787f2223ed",
-        "aa4835e4-9558-4fa7-a3b2-c08594c5a401",
-        "80c41e44-8b6e-4f37-9646-4730a3d1e74d",
-        "e065c3b7-4f35-4d5b-afaa-1ccab8d1664f",
-        "a36298e0-12fe-4068-b9b4-eb8822e22179"
-      ],
-      "description": "Retrieve brand profile, opportunity, audience, pillar and research source from Supabase"
-    },
-    {
-      "id": "65da9e64-fec0-4931-b23a-339d72d4fd9c",
-      "name": "Generate & Quality",
-      "nodeIds": [
-        "06b7fc96-e323-47ee-b30a-f15e851f69f0",
-        "3457af5c-8cc1-4e8e-ada4-614204ffcecc",
-        "b0a95641-cad0-46aa-be23-a409abe6ad3f",
-        "c774c8dc-bd7a-4af7-9ed6-b7f6de393d18",
-        "b0d64ab9-a03c-49cb-aaad-fda20699e11d",
-        "e4cf7b9d-926b-4f9d-91fc-274a7345f712",
-        "cd0c5ffc-9a01-495b-8c17-426d4d5fe119",
-        "88418d02-2307-4e47-b92d-359461c0359f",
-        "f28357d3-b29f-497a-b4a5-d3b877b3c61a",
-        "87c3a25a-16a6-4cca-94a8-32fb6888b7b7",
-        "f4951483-3257-45a2-8109-d5c527188a79",
-        "2f82eb54-07f3-4b36-864c-7affe280e2d7",
-        "00c12bb3-a1be-427a-a569-1137f4934182",
-        "037aa223-45a4-4b42-887a-b8534724d1cf",
-        "333ec51b-2f62-4788-b1db-497920053851"
-      ],
-      "description": "Generate the LinkedIn post, save the draft, quality check and regenerate once if needed"
-    },
-    {
-      "id": "8a491f3a-a41e-4048-b6b7-4524fe2dccd7",
-      "name": "Visual",
-      "nodeIds": [
-        "6b574c49-a795-428b-8bf7-b512374f634c",
-        "fd70885e-e00a-495b-8a62-b295b5c2c802",
-        "5cf23a59-2ba0-43e2-9143-0717e97815ba",
-        "ba02a545-9a89-4eb1-8fad-b5020857f30b",
-        "cf8d79d8-98a0-4c9d-bd43-7442ed47b657",
-        "6bce8ee1-d324-4b89-854e-5bfa3f5624a6",
-        "2adeb54d-7164-4fc2-a922-5d2c04975bc7"
-      ],
-      "description": "Decide visual strategy and save a detailed image prompt (status prompt_ready) for manual image creation"
-    },
-    {
-      "id": "b5d17673-e9a9-4fcd-a11e-69b89ba5a654",
-      "name": "Persist & Log",
-      "nodeIds": [
-        "34828fe0-f5a4-40e6-9295-d6e29ffb3b41",
-        "dd614621-7b73-4ab9-a351-a94549fe1dbe"
-      ],
-      "description": "Mark calendar ready for review and log the run to automation_runs"
-    }
-  ],
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "b9fb3cdf868e9dfec465e3c0424216039838facbcaef324bb65eb067f69e4271"
+    "instanceId": "61d4b402587ea0a8e4e00ab9ed2eed997f4bbab8707dfdcaf438932bd6c82ee7"
   }
 }
