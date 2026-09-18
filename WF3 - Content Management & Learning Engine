@@ -7,13 +7,13 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "ab348b57-ac0f-44e5-8112-b81cd2a5670c",
+      "id": "d6123b3d-93d1-4936-a1f3-79f9792f88d9",
       "name": "Content Management Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -64,
-        832
+        -1728,
+        704
       ],
       "webhookId": "ab84ceb8-b393-466f-966d-346dbc671426"
     },
@@ -220,13 +220,13 @@
           "renameFallbackOutput": "invalid"
         }
       },
-      "id": "56bd063b-847c-4668-88d6-38ea03ba71b4",
+      "id": "60acba22-aa60-4c7e-8d96-872393769495",
       "name": "Route Action",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        224,
-        720
+        -1440,
+        592
       ]
     },
     {
@@ -252,18 +252,18 @@
           ]
         }
       },
-      "id": "87304897-8e45-4636-93e5-ee6aea70a979",
+      "id": "71732d27-12e0-4ad2-9e13-42291900ccb8",
       "name": "Approve - Update Draft",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1408,
-        0
+        -256,
+        -128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -290,18 +290,18 @@
           ]
         }
       },
-      "id": "03042a4c-8298-4c7d-a721-70d63fc1d853",
+      "id": "0d1cbd90-e1b6-48a9-9c77-fbf5f2e3d3e8",
       "name": "Approve - Update Calendar",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1696,
-        0
+        32,
+        -128
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -349,24 +349,24 @@
         },
         "options": {}
       },
-      "id": "3bf4ee78-f67a-4bd2-9913-dae1d1b5f76a",
+      "id": "7517b5f1-929f-4b8d-8155-49ba41ea391a",
       "name": "Approve Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        0
+        256,
+        -128
       ]
     },
     {
       "parameters": {},
-      "id": "3f942ed8-50f4-4f8d-941b-71f4f0e6f081",
+      "id": "fc30d4dc-b04b-4755-96c3-2b2fa14908d0",
       "name": "Converge Result",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        2144,
-        832
+        480,
+        704
       ]
     },
     {
@@ -409,18 +409,18 @@
           ]
         }
       },
-      "id": "93bdf0ff-ec91-4d47-84fe-6b2980135269",
+      "id": "6174cbe3-2ac2-451b-97d3-5c87183d74cd",
       "name": "Log Automation Run",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2368,
-        736
+        704,
+        608
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -432,13 +432,13 @@
           "responseCode": "={{ $json.http_status }}"
         }
       },
-      "id": "78e73ee0-2cac-4538-a5c5-c9ebd061e7d0",
+      "id": "eaa8fcaf-44a6-49f9-a728-827c674856d1",
       "name": "Respond to Frontend",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        2368,
-        928
+        704,
+        800
       ]
     },
     {
@@ -468,18 +468,18 @@
           ]
         }
       },
-      "id": "8055d1b6-4b0c-425a-b9cb-36891fd74c1c",
+      "id": "b3a20df5-9456-465d-b181-ef9161ee7198",
       "name": "Reject - Update Draft",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1408,
-        192
+        -256,
+        64
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -506,18 +506,18 @@
           ]
         }
       },
-      "id": "b41b3998-7ae9-49db-853e-a5be8f33d4ab",
+      "id": "29360872-9491-42f9-bb52-de1e9bd26353",
       "name": "Reject - Update Calendar",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1696,
-        192
+        32,
+        64
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -565,13 +565,13 @@
         },
         "options": {}
       },
-      "id": "87a171ea-a3ec-4339-9ba0-dda196b6ad92",
+      "id": "4159248e-ec59-4e49-bf6a-35bf36cfe6d5",
       "name": "Reject Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        192
+        256,
+        64
       ]
     },
     {
@@ -579,8 +579,8 @@
         "workflowId": {
           "__rl": true,
           "mode": "id",
-          "value": "ormN681TBCmAE0ex",
-          "cachedResultName": "WF2 - Content Production Engine"
+          "value": "SdB3h6wSkx5O9ZPp",
+          "cachedResultName": "WF-2"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -634,13 +634,13 @@
         },
         "options": {}
       },
-      "id": "58071d0f-676d-4c62-9419-0857bfe7db51",
+      "id": "09a3b286-1c04-40ba-bc3e-6c6ebbd34b2e",
       "name": "Regenerate - Trigger WF2",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        1696,
-        384
+        32,
+        256
       ]
     },
     {
@@ -687,13 +687,13 @@
         },
         "options": {}
       },
-      "id": "fcb97a7d-ec5b-497d-8d73-1db0e706960f",
+      "id": "ef6843d3-95c0-4047-bc34-a4d63146f2ff",
       "name": "Regenerate Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        384
+        256,
+        256
       ]
     },
     {
@@ -719,18 +719,18 @@
           ]
         }
       },
-      "id": "1d81d0f1-cb6f-4762-a59c-970dd076e42d",
+      "id": "a0297a20-b80a-4aca-959c-9509d835a751",
       "name": "Reschedule - Update Calendar",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1696,
-        576
+        32,
+        448
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -778,13 +778,13 @@
         },
         "options": {}
       },
-      "id": "cefaa529-6ffe-4e85-bd8f-fb14b4b3d701",
+      "id": "21689850-e412-4c8f-882f-4fb09ad77f9d",
       "name": "Reschedule Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        576
+        256,
+        448
       ]
     },
     {
@@ -810,18 +810,18 @@
           ]
         }
       },
-      "id": "2cf5835a-f3ab-4f76-8c9b-1a1c26e565f3",
+      "id": "520eed49-1bbd-46e9-b221-bfba57126d50",
       "name": "Request Visual - Update",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1696,
-        1072
+        32,
+        944
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -869,13 +869,13 @@
         },
         "options": {}
       },
-      "id": "a0f306ef-d3cd-4d3a-810e-525810194892",
+      "id": "2ffed84f-6d02-4b23-92d0-96a870145962",
       "name": "Request Visual Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        1072
+        256,
+        944
       ]
     },
     {
@@ -901,18 +901,18 @@
           ]
         }
       },
-      "id": "b05dbc05-060c-4d42-b114-547a0e11d815",
+      "id": "ce74887d-1d57-44ed-855c-05bcdc427ab3",
       "name": "Retry Visual - Update",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1696,
-        1264
+        32,
+        1136
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -960,13 +960,13 @@
         },
         "options": {}
       },
-      "id": "fced6595-67e3-42f9-bc03-f573298107a4",
+      "id": "52fd4049-2b21-4a4a-9a20-8c8650675e74",
       "name": "Retry Visual Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        1264
+        256,
+        1136
       ]
     },
     {
@@ -992,18 +992,18 @@
           ]
         }
       },
-      "id": "c6d8f399-6e06-4683-9f4a-910143c6f9b0",
+      "id": "514412b2-4631-4772-9c8b-1e3564658081",
       "name": "Save Feedback",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1696,
-        1456
+        32,
+        1328
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1051,13 +1051,13 @@
         },
         "options": {}
       },
-      "id": "551eefec-b0d0-4f87-94af-06ee688e6025",
+      "id": "5472b433-5a81-49ed-a46d-b9dd1f24e017",
       "name": "Feedback Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        1456
+        256,
+        1328
       ]
     },
     {
@@ -1104,13 +1104,13 @@
         },
         "options": {}
       },
-      "id": "b5649bb0-8f20-4e1e-a5a9-4a0487039969",
+      "id": "8b57e01e-df4b-4e8e-95b1-ce76f123c3bb",
       "name": "Invalid Action Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        1920,
-        1648
+        256,
+        1520
       ]
     },
     {
@@ -1136,18 +1136,18 @@
           ]
         }
       },
-      "id": "02522294-5911-4846-a185-2c0430af2272",
+      "id": "1fabdfe8-a4bd-4e52-aac9-3a6873d706c7",
       "name": "Publish - Update Calendar",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1184,
-        960
+        -480,
+        832
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1178,18 +1178,18 @@
           ]
         }
       },
-      "id": "0ca4dab8-1b3e-4293-9067-48e5879ad653",
+      "id": "3cbf3e91-36b7-422f-bbfb-0a71812fe096",
       "name": "Publish - Update Draft",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1408,
-        960
+        -256,
+        832
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1245,18 +1245,18 @@
           ]
         }
       },
-      "id": "14f847b4-04a3-4923-bcb9-5b241c713555",
+      "id": "296ec857-8a51-4ade-8490-2bfa18c2d0c7",
       "name": "Save Analytics",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1632,
-        960
+        -32,
+        832
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1268,18 +1268,18 @@
         "orderBy": "created_at.desc",
         "filterType": "none"
       },
-      "id": "1c44122f-3383-4216-a653-8180bc5f0eb9",
+      "id": "f70a3842-316f-46db-bfd8-e33d27de5388",
       "name": "Get Analytics History",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1856,
-        960
+        192,
+        832
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1292,13 +1292,13 @@
           "systemMessage": "Analyze historical LinkedIn content performance. Identify topics, audiences, content pillars, hooks, and formats that performed well; recurring themes; and weak content patterns. Base findings only on the provided analytics data. Return concise, actionable insights that future research and content generation can use."
         }
       },
-      "id": "a82d1eea-abfc-477a-b0e1-289bb5b76c8a",
+      "id": "0b05147b-3622-4081-a880-f0b9c6b1f97b",
       "name": "AI - Performance Analysis",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        2080,
-        960
+        416,
+        832
       ]
     },
     {
@@ -1306,18 +1306,18 @@
         "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
-      "id": "bd19960a-6cb4-4522-ace0-d7138f614a35",
+      "id": "db8a0620-cafb-4a40-b1ec-ec5928a7668b",
       "name": "Performance Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        2096,
-        1184
+        432,
+        1056
       ],
       "credentials": {
         "googlePalmApi": {
-          "id": "QNmeIvFjzPFEgrfE",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "V041HcqRi4INtfCY",
+          "name": "Google Gemini"
         }
       }
     },
@@ -1325,13 +1325,13 @@
       "parameters": {
         "jsonSchemaExample": "{\"top_topics\":\"string\",\"top_audiences\":\"string\",\"top_pillars\":\"string\",\"top_hooks\":\"string\",\"top_formats\":\"string\",\"recurring_themes\":\"string\",\"weak_patterns\":\"string\",\"summary\":\"string\"}"
       },
-      "id": "efd3852c-2e1c-4921-92e7-5f7bf5c5cc41",
+      "id": "137691e7-cf37-41fc-9f66-4150b4393605",
       "name": "Performance Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2224,
-        1184
+        560,
+        1056
       ]
     },
     {
@@ -1378,18 +1378,18 @@
           ]
         }
       },
-      "id": "e4050ef1-ad9a-4c80-806a-5839fc531b43",
+      "id": "553d0165-d367-4786-98e0-6e8e0de1d21e",
       "name": "Save Insights",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2432,
-        960
+        768,
+        832
       ],
       "credentials": {
         "supabaseApi": {
-          "id": "ufzzbjeww5HWPvxb",
-          "name": "Supabase account"
+          "id": "B37JcLie7wP6x353",
+          "name": "Supabase"
         }
       }
     },
@@ -1437,13 +1437,13 @@
         },
         "options": {}
       },
-      "id": "1b7466fe-b05c-4303-9ce5-50d2e1f8e07b",
+      "id": "de0dfaba-6930-473b-a721-a4b067938588",
       "name": "Publish Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        2656,
-        960
+        992,
+        832
       ]
     }
   ],
@@ -1832,23 +1832,23 @@
   "pinData": {},
   "nodeGroups": [
     {
-      "id": "d6c95a1b-1b70-44f2-a29c-4b1bfce896c6",
+      "id": "e2f14165-33e1-4119-896f-a89dc411d805",
       "name": "Publish / Analytics / Learning",
       "nodeIds": [
-        "02522294-5911-4846-a185-2c0430af2272",
-        "0ca4dab8-1b3e-4293-9067-48e5879ad653",
-        "14f847b4-04a3-4923-bcb9-5b241c713555",
-        "1c44122f-3383-4216-a653-8180bc5f0eb9",
-        "a82d1eea-abfc-477a-b0e1-289bb5b76c8a",
-        "bd19960a-6cb4-4522-ace0-d7138f614a35",
-        "efd3852c-2e1c-4921-92e7-5f7bf5c5cc41",
-        "e4050ef1-ad9a-4c80-806a-5839fc531b43",
-        "1b7466fe-b05c-4303-9ce5-50d2e1f8e07b"
+        "1fabdfe8-a4bd-4e52-aac9-3a6873d706c7",
+        "3cbf3e91-36b7-422f-bbfb-0a71812fe096",
+        "296ec857-8a51-4ade-8490-2bfa18c2d0c7",
+        "f70a3842-316f-46db-bfd8-e33d27de5388",
+        "0b05147b-3622-4081-a880-f0b9c6b1f97b",
+        "db8a0620-cafb-4a40-b1ec-ec5928a7668b",
+        "137691e7-cf37-41fc-9f66-4150b4393605",
+        "553d0165-d367-4786-98e0-6e8e0de1d21e",
+        "de0dfaba-6930-473b-a721-a4b067938588"
       ],
       "description": "Mark published, store analytics, run performance analysis and save insights"
     }
   ],
   "meta": {
-    "instanceId": "b9fb3cdf868e9dfec465e3c0424216039838facbcaef324bb65eb067f69e4271"
+    "instanceId": "61d4b402587ea0a8e4e00ab9ed2eed997f4bbab8707dfdcaf438932bd6c82ee7"
   }
 }
